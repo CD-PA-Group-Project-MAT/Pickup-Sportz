@@ -4,6 +4,7 @@ const { authenticate } = require('../config/jwt.config');
 
 module.exports = app => {
     app.get("/api/messages",  MessageController.getAllMessages);
+    app.get("/api/messages/:eventId",  MessageController.getEventMessages);
     app.get('/api/messages/:id',  MessageController.getMessageById);
     app.post('/api/messages',  MessageController.createMessage);
     app.patch('/api/messages/:id',  MessageController.updateMessage);

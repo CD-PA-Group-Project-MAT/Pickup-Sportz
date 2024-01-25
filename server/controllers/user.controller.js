@@ -5,6 +5,20 @@ const jwt = require("jsonwebtoken");
 const SECRET = "secret_key" // For development
 
 module.exports = {
+
+  getCurrentUser: async (req, res) => {
+    try{
+      let userId = "65b0206a4ed598d48697c808" // this is going to come from JWT
+      const currentUser = await User.find({_id : userId}).populate("events"); // req.body.userId will come through JWT token
+      // TODO: the above 2 lines will be replaced by the line below when JWT goes live
+      //const currentUser = await User.find({_id : req.body.userId}).populate("events"); // req.body.userId will come through JWT token
+      res.status(200).json(currentUser);
+    } 
+    catch (err){
+      res.status(400).json(err);
+    }
+  },
+
   register : async (req,res) => {
     try {
       const possibleUser = await User.findOne({ email : req.body.email })
@@ -57,24 +71,25 @@ module.exports = {
     res.sendStatus(200);                                              // Apparently, this is the equivalent of res.status(200).send('OK')
   },
 
-  // TODO: remove this 'createUser' once testing is complete.  
+  // TODO: this is untested(new) code. Test it out. 
+  // We are using this primarily for checking last login date so 
+  // that we can count the new messages since then
+  updateUser: async (req, res) => {
+    try{
+      const updatedUser = await User.findOneAndUpdate ({_id : req.body.userId}, req.body, {new:true, runValidators:true}); // req.body.userId coming through JWT 
+      res.status(200).json(updatedUser);
+    } 
+    catch (err){
+      res.status(400).json(err);
+    }
+  },
+
+  // TODO: remove this 'createUser' once testing is complete and authentication is live.  
   createUser: async (req,res) => {
     try {
       const mewUser = await User.create (req.body)
       res.status(200).json(mewUser)
     } catch(err) {
-      res.status(400).json(err)
-    }
-  },
-  
-  // TODO: this is untested(new) code. Test it out. 
-  // We are using this primarily for checking last login date so that we can count new messages since then
-  updateUser: async (req, res) => {
-    try{
-      const updatedUser = await User.findOneAndUpdate ({_id : req.params.id}, req.body, {new:true, runValidators:true})
-      res.status(200).json(updatedUser)
-    } 
-    catch (err){
       res.status(400).json(err)
     }
   }

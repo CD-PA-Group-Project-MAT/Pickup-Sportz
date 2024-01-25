@@ -32,21 +32,24 @@ const UserSchema = new mongoose.Schema({
       type: String,
       required: [true, "Password is required"],
       minlength: [8, "Password must be 8 characters or longer"]
-    }
+    }, 
+    events: [{ type: mongoose.Schema.Types.ObjectId, ref: "Event"
+    }]
   }, {timestamps: true});
   
 
-// UserSchema.virtual('confirmPassword')
-// .get( () => this._confirmPassword ) 
-// .set( value => this._confirmPassword = value );
+UserSchema.virtual('confirmPassword')
+.get( () => this._confirmPassword ) 
+.set( value => this._confirmPassword = value );
 
-// UserSchema.pre('validate', function(next) {
-//   if (this.password !== this.confirmPassword) {
-//     this.invalidate('confirmPassword', 'Password must match confirm password');
-//   }
-//   next();
-// });
+UserSchema.pre('validate', function(next) {
+  if (this.password !== this.confirmPassword) {
+    this.invalidate('confirmPassword', 'Password must match confirm password');
+  }
+  next();
+});
   
+// TODO uncomment below when ready to add JWT
 // UserSchema.pre('save', function(next) {
 //   bcrypt.hash(this.password, 10) // bcrypt.hash returns a promise. 10 salt 'rounds'
 //     .then(hash => {

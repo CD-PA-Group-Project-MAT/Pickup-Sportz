@@ -15,13 +15,11 @@ const eventSchema = new mongoose.Schema({
         required: [true, "Participant count is required"],
         min: [2, "Event must accommodate at least 2 participants"]
     },
-    location: {type: mongoose.Schema.Types.ObjectId, ref: "Location"
+    location: {type: mongoose.Schema.Types.ObjectId, ref: "Location"  // maybe should require location id?
     }, 
-    creator: {type: mongoose.Schema.Types.ObjectId, ref: "User"
+    creator: {type: mongoose.Schema.Types.ObjectId, ref: "User"       // maybe should require creator id?
     }, 
     players: [{type: mongoose.Schema.Types.ObjectId, ref: "User"
-    }], 
-    messages: [{type: mongoose.Schema.Types.ObjectId, ref: "Message"
     }], 
 }, {timestamps: true})
 
