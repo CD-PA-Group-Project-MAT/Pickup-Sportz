@@ -12,6 +12,7 @@ users
 * 'virtual' confirmPassword | Virtual/String
 * checkedMessagesDate | Date (last time that the user checked messages so we can search for count of new messages since then)
 * userPhotoURL | String
+* events | **ref**: Event [array]  *<-- many to many relationship*
 
 events
 * _id | ObjectId
@@ -19,42 +20,15 @@ events
 * eventDate | Date (Holds date & time)
 * eventDetails (notes) | String
 * maxPlayers | Number
-* location | ref: Location
-* creator | ref: User
-* players | ref: User [array]
-  * _id
-  * firstName
-  * lastName
-  * email
-  * birthday
-  * password
-  * checkedMessagesDate
-  * userPhotoURL
-* messages | ref: Message [array]
-  * _id 
-  * messageContent
-  * author | ref: User
-    * _id
-    * firstName
-    * lastName
-    * email
-    * birthday
-    * password
-    * checkedMessagesDate
-    * userPhotoURL
+* location | **ref**: Location 
+* creator | **ref**: User 
+* players | **ref**: User [array] *<-- many to many relationship*
 
 messages
   * _id | ObjectId
   * messageContent | String
-  * author | ref: User
-    * _id
-    * firstName
-    * lastName
-    * email
-    * birthday
-    * password
-    * checkedMessagesDate
-    * userPhotoURL
+  * author | **ref**: User 
+  * event | **ref**: Event 
 
 locations
 * _id | ObjectId
@@ -66,6 +40,7 @@ locations
 
 ## API Routes
 user
+* app.get("/api/users", Users.getCurrentUser);
 * app.post("/api/register", Users.register);
 * app.post("/api/login", Users.login);
 * app.post("/api/logout", Users.logout); 
@@ -78,6 +53,8 @@ event
 * app.post('/api/events', EventController.createEvent);
 * app.patch('/api/events/:id', EventController.updateEvent);
 * app.delete('/api/events/:id', EventController.deleteEvent);
+* app.patch('/api/events/join/:eventId/player/:userId', EventController.joinEvent)
+* app.patch('/api/events/drop/:eventId/player/:userId', EventController.dropEvent)
 
 location
 * app.get("/api/locations", LocationController.getAllLocations);
@@ -88,6 +65,7 @@ location
 
 message
 * app.get("/api/messages",  MessageController.getAllMessages);
+* app.get("/api/messages/:eventId",  MessageController.getEventMessages);
 * app.get('/api/messages/:id',  MessageController.getMessageById);
 * app.post('/api/messages',  MessageController.createMessage);
 * app.patch('/api/messages/:id',  MessageController.updateMessage);
