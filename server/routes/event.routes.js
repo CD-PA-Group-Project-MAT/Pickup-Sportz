@@ -9,6 +9,6 @@ module.exports = app => {
     app.post('/api/events', EventController.createEvent);
     app.patch('/api/events/:id', EventController.updateEvent);
     app.delete('/api/events/:id', EventController.deleteEvent);
-    app.patch('/api/events/join/:eventId/player/:userId', EventController.joinEvent)
-    app.patch('/api/events/drop/:eventId/player/:userId', EventController.dropEvent)
+    app.patch('/api/events/join/:eventId/player/:userId', authenticate, EventController.joinEvent)
+    app.patch('/api/events/drop/:eventId/player/:userId', authenticate, EventController.dropEvent)
 }

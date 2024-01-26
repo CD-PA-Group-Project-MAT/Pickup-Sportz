@@ -1,63 +1,128 @@
-import React from 'react'
-import Navbar from './Navbar'
+import { useEffect, useState } from "react";
+import Navbar from "./Navbar";
+import axios from "axios";
 
 const Dashboard = () => {
+  const [ user, setUser ] = useState({}); // 'user' state holds the current user object
+  const [ events, setEvents ] = useState([]); // 'events' state holds an array of ALL events in the DB
+  const userFirstName = sessionStorage.getItem("userName") // User's first name retrieved from SessionStorage. It is placed there at registration or login
+
+  // This block returns an the current user's info from the server so that we have all it available to use
+  // Possibly this would be better handled in setting context or some other way, but we can figure that out later
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/users", {withCredentials: true})
+      .then(res => {
+        console.log("user:")
+        console.log(res.data[0])
+        setUser(res.data[0])}
+      )
+      .catch((err) => console.error(err));
+  }, []);
+
+  // This block populates an array of the entire database of events and sets 'events' state
+  // We actually won't use this on this page because events on this page will be coming from the 'user'
+  // but we will use it on the search' page
+  useEffect(() => {
+    axios.get("http://localhost:8000/api/events", {withCredentials: true})
+    .then(res => {
+      console.log("events")
+      console.log(res.data);
+      setEvents(res.data);
+    })
+    .catch(err => console.error(err))
+  },[])
+
+  // THIS BLOCK AND THE 'Join' & 'Drop' BUTTONS BELOW ARE JUST HERE FOR TESTING PURPOSES UNTIL WE BUILD OUT SOME MORE FUNCTIONS
+  // function joinHandler(){
+  //   const eventId = "65b00b8d846db0c90f31c70e"
+  //   axios.patch(`http://localhost:8000/api/events/join/${eventId}/player/${user._id}`,{} ,{withCredentials : true})
+  //   .then()
+  //   .catch()
+  // }
+  // function dropHandler(){
+  //   const eventId = "65b00b8d846db0c90f31c70e"
+  //   axios.patch(`http://localhost:8000/api/events/drop/${eventId}/player/${user._id}`,{} ,{withCredentials : true})
+  //   .then()
+  //   .catch()
+  // }
+
   return (
+    <div>
+      {<Navbar />}
+      {/* table page - need to style so tired */}
       <div>
-        {<Navbar/>}
-        {/* table page - need to style so tired */}
+        {/* Your Events Title */}
         <div>
-            {/* Your Events Title */}
-            <div>
-                <h1>Your Events</h1>
-            </div>
-            {/* Todays events table */}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Event Name</th>
-                        <th>Location</th>
-                        <th>Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Basketball</td>
-                        <td>Bryant Park</td>
-                        <td>4PM PST</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            {/* upcoming events h1 */}
-            <div>
-                <h1>Upcoming Events</h1>
-            </div>
-            {/* upcoming events table */}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Event Name</th>
-                        <th>Location</th>
-                        <th>Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Baseball</td>
-                        <td>Dodger Stadium</td>
-                        <td>7PM PST</td>
-                    </tr>
-                </tbody>
-            </table>
+          <h1>Your Events, {userFirstName}</h1>
+          {/* <p>USER ID: {user._id}</p>
+          <button className="bg-gray-300" onClick={joinHandler}>Join</button> }
+          <button className="bg-gray-300" onClick={dropHandler}>Drop</button> */}
         </div>
+        {/* Todays events table */}
+        <table>
+          <thead>
+            <tr>
+              <th>Event Name</th>
+              <th>Location</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* TODO: fix the filter here */}
+            {/* should actually be user.events instead of just 'events' in the ternary below */}
+            {/* but we will change it once we have more functionality built out */}
+            { events ? events.filter((event) => new Date(event.eventDate).getTime() < new Date().getTime() ).map(event => 
+              <tr key={event._id}>
+                <td>
+                  {event.eventTitle}
+                </td>
+                <td>
+                  {event.location.locationName}
+                </td>
+                <td>
+                  {new Date(event.eventDate).toLocaleTimeString()}
+                </td>
+              </tr>
+            ):null}
+          </tbody>
+        </table>
+
+        {/* upcoming events h1 */}
+        <div>
+          <h1>Upcoming Events</h1>
+        </div>
+        {/* upcoming events table */}
+        <table>
+          <thead>
+            <tr>
+              <th>Event Name</th>
+              <th>Location</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* TODO: fix the filter here */}
+            {/* should actually be user.events instead of just 'events' in the ternary below */}
+            {/* but we will change it once we have more functionality built out */}
+          { events ? events.filter((event) => new Date(event.eventDate).getTime() > new Date().getTime()).map(event => 
+              <tr key={event._id}>
+                <td>
+                  {event.eventTitle}
+                </td>
+                <td>
+                  {event.location.locationName}
+                </td>
+                <td>
+                  {new Date(event.eventDate).toLocaleTimeString()}
+                </td>
+              </tr>
+            ):null}
+          </tbody>
+        </table>
+      </div>
     </div>
-    
+  );
+};
 
-
-
-
-  )
-}
-
-export default Dashboard
+export default Dashboard;

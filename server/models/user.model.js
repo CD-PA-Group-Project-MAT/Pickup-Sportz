@@ -49,14 +49,13 @@ UserSchema.pre('validate', function(next) {
   next();
 });
   
-// TODO uncomment below when ready to add JWT
-// UserSchema.pre('save', function(next) {
-//   bcrypt.hash(this.password, 10) // bcrypt.hash returns a promise. 10 salt 'rounds'
-//     .then(hash => {
-//       this.password = hash;
-//       next();
-//     }); 
-//   }
-// );
+UserSchema.pre('save', function(next) {
+  bcrypt.hash(this.password, 10) // bcrypt.hash returns a promise. 10 salt 'rounds'
+    .then(hash => {
+      this.password = hash;
+      next();
+    }); 
+  }
+);
 
 module.exports = mongoose.model("User", UserSchema);

@@ -11,7 +11,7 @@ const SECRET = "secret_key" // For development
   to the server
   */
 module.exports.authenticate = (req, res, next) => {
-  jwt.verify(req.cookies.userToken, secret, (err, payload) => {
+  jwt.verify(req.cookies.userToken, SECRET, (err, payload) => {
     if (err) {
       console.log("Authenticate failed within jwt.config.js")
       res.status(401).json({verified: false});
