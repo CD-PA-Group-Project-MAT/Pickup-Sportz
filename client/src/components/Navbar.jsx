@@ -5,11 +5,10 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const logoutUser = () => {
-    // console.log("entered logout user")
     axios
-      .post("http://localhost:8000/api/logout", {}, { withCredentials: true })
-      .then((res) => {
-        sessionStorage.removeItem("userName");
+      .post("http://localhost:8000/api/logout", {}, { withCredentials: true }) // This will "clearCookie" userToken on back end
+      .then((res) => {      
+        sessionStorage.removeItem("userName");                                  // This clears sessionStorage
         navigate("/");
       })
       .catch((err) => console.error("error logging out" + err));
