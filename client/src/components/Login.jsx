@@ -15,6 +15,7 @@ const Login = () => {
       axios.post("http://localhost:8000/api/login", { email, password}, { withCredentials : true }) 
       .then((res) => {
         sessionStorage.setItem('userName', res.data.user.firstName)
+        sessionStorage.setItem('userId', res.data.user._id)
         navigate('/dashboard');
       } )
       .catch(err => {

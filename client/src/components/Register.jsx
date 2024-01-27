@@ -30,6 +30,7 @@ const Register = () => {
       axios.post("http://localhost:8000/api/register", user, {withCredentials:true})
       .then((res) => {
         sessionStorage.setItem('userName', res.data.user.firstName)
+        sessionStorage.setItem('userId', res.data.user._id)
         navigate("/dashboard");
       })
       .catch(err => {
