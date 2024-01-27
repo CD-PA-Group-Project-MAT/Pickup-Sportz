@@ -11,7 +11,6 @@ const Login = () => {
 
   const loginHandler = (e) =>  {
       e.preventDefault();
-      console.log("onSubmit")
       // TODO: first thing upon attempt to login would be to 'logout' if there is a cookie and sessionStorage
       axios.post("http://localhost:8000/api/login", { email, password}, { withCredentials : true }) 
       .then((res) => {
