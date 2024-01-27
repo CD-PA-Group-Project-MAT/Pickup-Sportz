@@ -7,8 +7,17 @@ const Dashboard = () => {
   const [ events, setEvents ] = useState([]); // 'events' state holds an array of ALL events in the DB
   const userFirstName = sessionStorage.getItem("userName") // User's first name retrieved from SessionStorage. It is placed there at registration or login
 
-  // This block returns an the current user's info from the server so that we have all it available to use
-  // Possibly this would be better handled in setting context or some other way, but we can figure that out later
+  /* This function will accept a date in ISO date format (eg:"2024-01-31T18:00:00.000Z" )
+    It will return true if the that date is after midnight tonight, otherwise it will return false  */
+  function afterToday(eventDate){
+    let currentTime = new Date()
+    let midnightToday = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate())
+    let midnightTonight = new Date(midnightToday.getTime()+24*60*60*1000); 
+    return new Date(eventDate) >= midnightTonight;
+  }
+  
+  /* This block returns an the current user's info from the server so that we have all it available to use
+   Possibly this would be better handled in setting context or some other way, but we can figure that out later */
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/users", {withCredentials: true})
@@ -65,20 +74,23 @@ const Dashboard = () => {
             <tr>
               <th>Event Name</th>
               <th>Location</th>
+              <th>Attendees</th>
               <th>Time</th>
             </tr>
           </thead>
           <tbody>
-            {/* TODO: fix the filter here */}
             {/* should actually be user.events instead of just 'events' in the ternary below */}
             {/* but we will change it once we have more functionality built out */}
-            { events ? events.filter((event) => new Date(event.eventDate).getTime() < new Date().getTime() ).map(event => 
+            { events ? events.filter((event) => new Date(event.eventDate).toDateString() == new Date().toDateString() ).map(event => 
               <tr key={event._id}>
                 <td>
                   {event.eventTitle}
                 </td>
                 <td>
                   {event.location.locationName}
+                </td>
+                <td>
+                  {event.players.length} / {event.maxPlayers}
                 </td>
                 <td>
                   {new Date(event.eventDate).toLocaleTimeString()}
@@ -98,14 +110,14 @@ const Dashboard = () => {
             <tr>
               <th>Event Name</th>
               <th>Location</th>
+              <th>Attendees</th>
               <th>Time</th>
             </tr>
           </thead>
           <tbody>
-            {/* TODO: fix the filter here */}
             {/* should actually be user.events instead of just 'events' in the ternary below */}
             {/* but we will change it once we have more functionality built out */}
-          { events ? events.filter((event) => new Date(event.eventDate).getTime() > new Date().getTime()).map(event => 
+          { events ? events.filter((event) => afterToday(event.eventDate)).map(event => 
               <tr key={event._id}>
                 <td>
                   {event.eventTitle}
@@ -114,6 +126,10 @@ const Dashboard = () => {
                   {event.location.locationName}
                 </td>
                 <td>
+                  {event.players.length} / {event.maxPlayers}
+                </td>
+                <td>
+                  {new Date(event.eventDate).toLocaleDateString()} @
                   {new Date(event.eventDate).toLocaleTimeString()}
                 </td>
               </tr>
