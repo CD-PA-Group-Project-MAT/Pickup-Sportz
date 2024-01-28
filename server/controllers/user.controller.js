@@ -8,14 +8,9 @@ module.exports = {
 
   getCurrentUser: async (req, res) => {
     try{
-      // let userId = "65b0206a4ed598d48697c808" // this is going to come from JWT
-      // const currentUser = await User.find({_id : userId}).populate("events"); // req.body.userId will come through JWT token
-      // TODO: the above 2 lines will be replaced by the line below when JWT goes live
       const currentUser = await User
-        .find({_id : req.body.userId})
-        // .populate('events')
-        .populate({path: 'events', populate: { path: 'location', model: "Location"}})
-        ; // req.body.userId will come through JWT token
+        .find({_id : req.body.userId})                         // req.body.userId will come through JWT token
+        .populate({path: 'events', populate: { path: 'location', model: "Location"}}); 
       res.status(200).json(currentUser);
     } 
     catch (err){
@@ -23,19 +18,19 @@ module.exports = {
     }
   },
 
+  // TODO reduce cookie maxAge and token expiresIn
   register : async (req,res) => {
     try {
       const possibleUser = await User.findOne({ email : req.body.email })
       if (possibleUser) {
         res.status(400).json({errors: { email : { message : 'This email already exists. Please log in.' }}})
       } else {
-
         const newUser = await User.create(req.body)
         // *The first value passed into jwt.sign is the 'payload'. This can be retrieved in jwt.verify
-        const userToken = jwt.sign({ _id : newUser._id, email : newUser.email }, SECRET, { expiresIn: '2h' });  // Token expires in 2 hours
+        const userToken = jwt.sign({ _id : newUser._id, email : newUser.email }, SECRET, { expiresIn: '12h' });  // Token expires in 12 hours
         res
           .status(201)
-          .cookie("userToken", userToken, { httpOnly: true, maxAge : 2*60*60*1000}) // Cookie maxAge = 2 hours from now
+          .cookie("userToken", userToken, { httpOnly: true, maxAge : 12*60*60*1000}) // Cookie maxAge = 12 hours from now
           .json({msg: "success!", user : newUser})
       }
     }
