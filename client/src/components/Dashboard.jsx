@@ -53,34 +53,36 @@ const Dashboard = () => {
           <h1>Your Events, {userFirstName}</h1>
         </div>
         {/* Todays events table */}
-        <table>
-          <thead>
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table className="w-1/2 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th>Event Name</th>
-              <th>Location</th>
-              <th>Attendees</th>
-              <th>Time</th>
+              <th scope="col" class="px-6 py-3">Event Name</th>
+              <th scope="col" class="px-6 py-3">Location</th>
+              <th scope="col" class="px-6 py-3">Attendees</th>
+              <th scope="col" class="px-6 py-3">Time</th>
             </tr>
           </thead>
           <tbody>
             { user.events ? user.events.filter((event) => new Date(event.eventDate).toDateString() == new Date().toDateString() ).map(event => 
-              <tr key={event._id}>
-                <td>
+              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" key={event._id}>
+                <td class="px-6 py-4">
                   {event.eventTitle}
                 </td>
-                <td>
+                <td class="px-6 py-4">
                   {event.location.locationName}
                 </td>
-                <td>
+                <td class="px-6 py-4"> 
                   {event.players.length} / {event.maxPlayers}
                 </td>
-                <td>
+                <td class="px-6 py-4">
                   {new Date(event.eventDate).toLocaleTimeString()}
                 </td>
               </tr>
             ):null}
           </tbody>
         </table>
+        </div>
 
         {/* upcoming events h1 */}
         <div>

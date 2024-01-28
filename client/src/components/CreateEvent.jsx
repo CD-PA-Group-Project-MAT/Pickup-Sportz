@@ -114,7 +114,7 @@ const CreateEvent = () => {
               {/* event time */}
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Event Date
+                  Event Time
                 </label>
                 <input
                   type="time"

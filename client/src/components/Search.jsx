@@ -56,38 +56,39 @@ function Search() {
     <div>
       <Navbar/>
       <SearchForm eventsList={eventsList} setFilteredEvents={setFilteredEvents}/>
-      <table>
-          <thead>
+      <div className="flex relative overflow-x-auto shadow-md sm:rounded-lg justify-center">
+      <table className="w-1/2 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th>Event Name</th>
-              <th>Location</th>
-              <th>Attendees</th>
-              <th>Date</th>
-              <th>Creator</th>
-              <th>Action</th>
+              <th scope="col" class="px-6 py-3">Event Name</th>
+              <th scope="col" class="px-6 py-3">Location</th>
+              <th scope="col" class="px-6 py-3">Attendees</th>
+              <th scope="col" class="px-6 py-3">Date</th>
+              <th scope="col" class="px-6 py-3">Creator</th>
+              <th scope="col" class="px-6 py-3">Action</th>
             </tr>
           </thead>
           <tbody>
           { filteredEvents ? filteredEvents.map(event => 
-              <tr key={event._id}>
-                <td>
+              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" key={event._id}>
+                <td class="px-6 py-4">
                   {event.eventTitle}
                 </td>
-                <td>
+                <td class="px-6 py-4">
                   {event.location.locationName}
                 </td>
-                <td>
+                <td class="px-6 py-4">
                   {event.players.length} / {event.maxPlayers}
                 </td>
-                <td>
+                <td class="px-6 py-4">
                   {new Date(event.eventDate).toLocaleDateString()} @
                   {new Date(event.eventDate).toLocaleTimeString()}
                 </td>
-                <td>
+                <td class="px-6 py-4">
                   {event.creator.firstName} 
                   {event.creator.lastName} 
                 </td>
-                <td>
+                <td class="px-6 py-4">
                   { userIsPlayer(event) ? 
                     <span className="text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" onClick={() => dropHandler(event._id)}>Drop</span>
                      :
@@ -99,6 +100,7 @@ function Search() {
             ):null}
           </tbody>
         </table>
+        </div>
     </div>
   )
 }
