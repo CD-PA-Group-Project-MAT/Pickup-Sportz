@@ -43,17 +43,16 @@ module.exports = {
 
   joinEvent: async (req, res) => {
     try {
-      console.log("attempting join")
       const eventId = req.params.eventId
       const userId = req.params.userId
       const updatedEvent = await Event.findByIdAndUpdate(eventId,
         { $push: { players: userId}},
         { new: true, useFindAndModify: false});
-      const updatedUser = await User.findByIdAndUpdate(userId,
+        const updatedUser = await User.findByIdAndUpdate(userId,
         { $push: { events: eventId}},
         { new: true, useFindAndModify: false});
-      res.json(updatedEvent);
-    } catch (err) {
+        res.json(updatedEvent);
+      } catch (err) {
       res.status(400).json(err)
     }
   },

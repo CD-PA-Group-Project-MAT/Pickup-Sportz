@@ -11,11 +11,11 @@ const Login = () => {
 
   const loginHandler = (e) =>  {
       e.preventDefault();
-      console.log("onSubmit")
-      // TODO: first thing upon attempt to login would be to 'logout' if there is a cookie and sessionStorage
+      // TODO: eventually - first thing upon attempt to login would be to 'logout' if there is a cookie and sessionStorage
       axios.post("http://localhost:8000/api/login", { email, password}, { withCredentials : true }) 
       .then((res) => {
         sessionStorage.setItem('userName', res.data.user.firstName)
+        sessionStorage.setItem('userId', res.data.user._id)
         navigate('/dashboard');
       } )
       .catch(err => {
@@ -23,6 +23,7 @@ const Login = () => {
       })
   }
 
+  // TODO: current - Add display of validation errors
   return (
     <section className="bg-gray-900 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -31,7 +32,6 @@ const Login = () => {
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                     Sign in to your Pickup Sportz account
                 </h1>
-                {/* need to add on submit - left blank */}
                 <form className="space-y-4 md:space-y-6" onSubmit={loginHandler}>
                     <div>
                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
