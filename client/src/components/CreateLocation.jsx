@@ -3,6 +3,10 @@ import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+// TODO: Add a cancel button
+// TODO: color for error messages
+// TODO: Link to 'CreateLocation' not visible on my screen (white on white)
+
 const CreateLocation = () => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
@@ -33,14 +37,6 @@ const CreateLocation = () => {
         setErrors(err.response.data.errors);
       });
   };
-
-  // useEffect(() => {
-  //     axios.get("http://localhost:8000/api/locations")
-  //     .then(res => {
-  //         setLocation(res.data)
-  //     })
-  //     .catch(err => console.log(err))
-  // }, [])
 
   return (
     <div className="bg-gray-900 dark:bg-gray-900">
