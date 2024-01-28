@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./components/Login.jsx";
 import Register from "./components/Register.jsx";
 import Dashboard from "./components/Dashboard.jsx";
-HEAD
 import CreateEvent from "./components/CreateEvent.jsx";
 import CreateLocation from "./components/CreateLocation.jsx";
 
@@ -20,10 +19,7 @@ function App() {
 
         <Route path="/newEvent" element={<CreateEvent />} />
         <Route path="/newlocation" element={<CreateLocation />} />
-        
-=======
         <Route path="/search" element={<Search />} />
-
       </Routes>
     </BrowserRouter>
   );
