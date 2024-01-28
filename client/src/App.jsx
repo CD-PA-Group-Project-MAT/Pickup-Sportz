@@ -4,6 +4,7 @@ import Register from "./components/Register.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import CreateEvent from "./components/CreateEvent.jsx";
 import CreateLocation from "./components/CreateLocation.jsx";
+import ViewEvent from "./components/ViewEvent.jsx";
 
 import Search from "./components/Search.jsx";
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/newEvent" element={<CreateEvent />} />
         <Route path="/newlocation" element={<CreateLocation />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/viewevent" element={<ViewEvent />} />
       </Routes>
     </BrowserRouter>
   );

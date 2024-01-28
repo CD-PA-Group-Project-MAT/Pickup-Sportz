@@ -1,8 +1,12 @@
 import React from 'react'
+import Navbar from './Navbar'
 
 const ViewEvent = () => {
   return (
-    <div> Test</div>
+    <div> 
+        <Navbar/>
+        <h1>test</h1>
+    </div>
   )
 }
 
