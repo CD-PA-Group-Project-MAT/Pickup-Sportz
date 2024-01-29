@@ -28,12 +28,46 @@ const ViewEvent = () => {
   },[]);
 
 
+//   todo: need to finish styling. Have the div's in order just need to set up my text boxes. Tony, if you have any ideas on how to make this look better, please feel free to let me know. Not sure where we stand on bringing in that api just yet.
+
   return (
     <div>
-      <Navbar/>
-      {event.eventTitle} {event._id}
-      <MessageDisplay messages={messages} setMessages={setMessages}/>
-      <MessageForm id={id}/>
+        {/* nav */}
+        <div>
+            <Navbar/>
+        </div>
+    {/* everything wrapper - gonna flex info and messages so they are side by side */}
+    <div className='flex flex-row justify-evenly my-20'>
+        {/* wrapper for card */}
+    <div className=' text-white border border-gray-700 w-80'>
+        {/* title */}
+        <div>
+            <h2>
+        {event.eventTitle}
+            </h2>
+        </div>
+        {/* date */}
+        <div>
+        {event.eventDate}
+        </div>
+        {/* location */}
+        <div>
+        {event.location.locationName}
+        </div>
+        {/* details */}
+        <div>
+        {event.eventDetails}
+        </div>
+    </div>
+    
+    {/* Messages div - keeping separate in case we want to scap api and use these in that window instead.*/}
+    <div className=' text-white'>
+    <div>
+        <MessageDisplay messages={messages} setMessages={setMessages}/>
+        <MessageForm id={id}/>
+    </div>
+    </div>
+    </div>
     </div>
   )
 }

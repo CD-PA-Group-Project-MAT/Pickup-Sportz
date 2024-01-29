@@ -43,18 +43,21 @@ const Dashboard = () => {
   //   .catch(err => console.error(err))
   // },[])
 
+  // todo: need to move tables down a bit, should be east enough. Also see if you can round off tables to make them look consistent with rest of UI (Tony you can ignore this comment its just so I remember)
+
   return (
     <div>
       {<Navbar />}
       {/* table page - need to style so tired */}
-      <div>
-        {/* Your Events Title */}
+      <div className="space-y-4">
         <div>
-          <h1>Your Events, {userFirstName}</h1>
+        {/* Your Events Title */}
+        <div className="flex relative justify-center">
+          <h1 className="text-xl text-white">Your Events, {userFirstName}</h1>
         </div>
         {/* Todays events table */}
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table className="w-1/2 text-sm text-left rtl:text-right rounded-lg text-gray-500 dark:text-gray-400">
+        <div className="flex relative overflow-x-auto shadow-md justify-center sm:rounded-lg">
+        <table className="w-1/2 text-sm text-left rtl:text-right  text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" class="px-6 py-3">Event Name</th>
@@ -83,34 +86,38 @@ const Dashboard = () => {
           </tbody>
         </table>
         </div>
-
+        </div>
+        
         {/* upcoming events h1 */}
+        
         <div>
-          <h1>Upcoming Events</h1>
+        <div className="flex relative justify-center">
+          <h1 className="text-xl text-white">Upcoming Events</h1>
         </div>
         {/* upcoming events table */}
-        <table>
-          <thead>
+        <div className="flex relative overflow-x-auto shadow-md justify-center sm:rounded-lg">
+        <table className="w-1/2 text-sm text-left rtl:text-right  text-gray-400">
+          <thead className="text-xs  uppercase bg-gray-700 text-gray-400">
             <tr>
-              <th>Event Name</th>
-              <th>Location</th>
-              <th>Attendees</th>
-              <th>Time</th>
+              <th scope="col" class="px-6 py-3">Event Name</th>
+              <th scope="col" class="px-6 py-3">Location</th>
+              <th scope="col" class="px-6 py-3">Attendees</th>
+              <th scope="col" class="px-6 py-3">Time</th>
             </tr>
           </thead>
           <tbody>
           { user.events ? user.events.filter((event) => afterToday(event.eventDate)).map(event => 
-              <tr key={event._id}>
-                <td>
+              <tr class=" border-b bg-gray-800 border-gray-700 hover:bg-gray-600" key={event._id}>
+                <td class="px-6 py-4">
                   {event.eventTitle}
                 </td>
-                <td>
+                <td class="px-6 py-4">
                   {event.location.locationName}
                 </td>
-                <td>
+                <td class="px-6 py-4">
                   {event.players.length} / {event.maxPlayers}
                 </td>
-                <td>
+                <td class="px-6 py-4">
                   {new Date(event.eventDate).toLocaleDateString()} @
                   {new Date(event.eventDate).toLocaleTimeString()}
                 </td>
@@ -118,6 +125,8 @@ const Dashboard = () => {
             ):null}
           </tbody>
         </table>
+        </div>
+        </div>
       </div>
     </div>
   );
