@@ -53,10 +53,10 @@ function Search() {
   }
 
   return (
-    <div>
+    <div className="bg-gray-50 dark:bg-gray-700 max-xl:bg-gray-50">
       <Navbar/>
       <SearchForm eventsList={eventsList} setFilteredEvents={setFilteredEvents}/>
-      <div className="flex relative overflow-x-auto shadow-md sm:rounded-lg justify-center">
+      <div className="flex relative overflow-x-auto shadow-md justify-center sm:rounded-lg">
       <table className="w-1/2 text-sm text-left rtl:text-right  text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
