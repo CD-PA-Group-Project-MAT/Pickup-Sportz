@@ -57,9 +57,9 @@ function Search() {
     <div>
       <Navbar/>
       <SearchForm eventsList={eventsList} setFilteredEvents={setFilteredEvents}/>
-      <div className="flex relative overflow-x-auto shadow-md sm:rounded-lg justify-center">
-      <table className="w-1/2 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <div className="flex mt-20 relative overflow-x-auto shadow-md justify-center sm:rounded-lg">
+      <table className="w-1/2 text-sm text-left rtl:text-right  text-gray-400">
+          <thead className="text-xs text-gray-400 uppercase bg-gray-700">
             <tr>
               <th scope="col" className="px-6 py-3">Event Name</th>
               <th scope="col" className="px-6 py-3">Location</th>
@@ -71,7 +71,7 @@ function Search() {
           </thead>
           <tbody>
           { filteredEvents ? filteredEvents.map(event => 
-              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" key={event._id}>
+              <tr className=" border-b bg-gray-800 border-gray-700 hover:bg-gray-600" key={event._id}>
                 <td className="px-6 py-4">
                   <Link to={`/events/${event._id}`}>{event.eventTitle}</Link>
                 </td>
@@ -90,11 +90,11 @@ function Search() {
                 </td>
                 <td className="px-6 py-4">
                   { userIsPlayer(event) ? 
-                    <span className="text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" onClick={() => dropHandler(event._id)}>Drop</span>
+                    <span className="rounded  md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700 cursor-pointer" onClick={() => dropHandler(event._id)}>Drop</span>
                      :
                      event.players.length >= event.maxPlayers ? "Full" 
                      : 
-                     <span className="text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700" onClick={() => joinHandler(event._id)}>Join</span> } 
+                     <span className=" md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 dark:text-white md:hover:bg-transparent border-gray-700" onClick={() => joinHandler(event._id)}>Join</span> } 
                 </td>
               </tr>
             ):null}

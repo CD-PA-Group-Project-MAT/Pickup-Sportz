@@ -78,13 +78,13 @@ const CreateEvent = () => {
     })
   }
   return (
-    <div className="bg-gray-900 dark:bg-gray-900">
+    <div>
       {/* nav bar */}
       <div>{<Navbar />}</div>
       <div className="flex flex-col items-center justify-center mx-auto md:h-screen">
-        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-900 dark:border-gray-700">
+        <div className="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 bg-gray-900 border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+            <h1 className="text-xl font-bold leading-tight tracking-tight md:text-2xl text-white">
               Create an Event
             </h1>
             <form className="space-y-4" onSubmit={handleSubmit}>
@@ -92,7 +92,7 @@ const CreateEvent = () => {
               <div>
                 <label
                   htmlFor="eventTitle"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white"
                 >
                   Event Title
                 </label>
@@ -100,7 +100,7 @@ const CreateEvent = () => {
                   type="text"
                   name="eventTitle"
                   id="eventTitle"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-900 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Event Title"
                   required="" value={event.eventTitle} onChange={handleChange}
                 />
@@ -110,38 +110,38 @@ const CreateEvent = () => {
               </div>
               {/* event date */}
               <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label className="block mb-2 text-sm font-medium text-white">
                   Event Date
                 </label>
                 <input
                   type="date"
                   name="datePicker"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  value={datePicker} onChange={handleChange}
+                  className=" border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-900 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"  value={datePicker} onChange={handleChange}
                 />
               </div>
               {/* event time */}
               <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label className="block mb-2 text-sm font-medium text-white">
                   Event Time
                 </label>
                 <input
                   type="time"
                   name="timePicker"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  value={timePicker} onChange={handleChange}
+                  className=" border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-900 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"  value={timePicker} onChange={handleChange}
                 />
               </div>
               {/* event details */}
               <div>
                 <label
                   htmlFor="eventDetails"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white"
                 >
                   Event Details
                 </label>
                 <textarea
                   name="eventDetails"
                   rows="4"
-                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="block p-2.5 w-full text-sm rounded-lg border  focus:ring-blue-500 focus:border-blue-500 bg-gray-700 border-gray-600 placeholder-gray-400 text-white"
                   placeholder="Write the details of the event here..." value={event.eventDetails} onChange={handleChange}
                 ></textarea>
               </div>
@@ -149,7 +149,7 @@ const CreateEvent = () => {
               <div>
                 <label
                   htmlFor="maxPlayers"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white"
                 >
                   Maximum Participants
                 </label>
@@ -157,12 +157,12 @@ const CreateEvent = () => {
                   type="number"
                   name="maxPlayers"
                   id="maxPlayers"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-900 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Maximum Participants"
                   required="" value={event.maxPlayers} onChange={handleChange}
                 />
                 {errors.maxPlayers ? (
-                  <p>{errors.maxPlayers.message}</p>
+                  <p className="text-white">{errors.maxPlayers.message}</p>
                 ) : null}
               </div>
               {/* event location */}
@@ -170,12 +170,12 @@ const CreateEvent = () => {
               <div>
                 <label
                   htmlFor="location"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-white"
                 >
                   Location
                 </label>
                 <select name="location"
-                  className="bg-gray-50 border border-white text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:text-white"
+                  className=" border border-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 text-white"
                   onChange={handleChange}
                 >
                   {locations.map((location) => (
@@ -192,7 +192,7 @@ const CreateEvent = () => {
               <div className="py-1">
                 <button
                   type="submit"
-                  className="bg-gray-50 border border-gray-700 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:text-white"
+                  className="border border-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 text-white"
                 >
                   Create Event
                 </button>
