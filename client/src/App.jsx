@@ -21,7 +21,7 @@ function App() {
         <Route path="/newEvent" element={<CreateEvent />} />
         <Route path="/newlocation" element={<CreateLocation />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/viewevent" element={<ViewEvent />} />
+        <Route path="/events/:id" element={<ViewEvent />} />
       </Routes>
     </BrowserRouter>
   );
