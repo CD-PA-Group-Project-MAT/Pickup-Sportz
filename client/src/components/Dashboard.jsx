@@ -19,30 +19,30 @@ const Dashboard = () => {
     return new Date(eventDate) >= midnightTonight;
   }
   
-  /* This block returns an the current user's info from the server so that we have all it available to use
-   Possibly this would be better handled in setting context or some other way, but we can figure that out later */
+  /* 
+  This next useEffect block returns the current user's info from the server so that we have all it available to use.
+  Pulling from 'useAuth' night not work (or would be more complicated) because the array of events needs to be updated every 
+  time we render this component
+   */
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/users", {withCredentials: true})
       .then(res => {
-        console.log("user:")
-        console.log(res.data[0])
         setUser(res.data[0])}
       )
       .catch((err) => console.error(err));
   }, []);
 
-  // todo: need to move tables down a bit, should be east enough. Also see if you can round off tables to make them look consistent with rest of UI (Tony you can ignore this comment its just so I remember)
+  // todo: need to move tables down a bit, should be easy enough. Also see if you can round off tables to make them look consistent with rest of UI (Tony you can ignore this comment its just so I remember)
 
   return (
     <div>
       {<Navbar />}
-      {/* table page - need to style so tired */}
       <div className="space-y-4">
         <div>
         {/* Your Events Title */}
         <div className="flex relative justify-center">
-          <h1 className="text-xl text-white">Your Events, {userFirstName}</h1>
+          <h1 className="text-xl text-white">Get your game on today, {userFirstName}:</h1>
         </div>
         {/* Todays events table */}
         <div className="flex relative overflow-x-auto shadow-md justify-center sm:rounded-lg">
@@ -56,7 +56,9 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-            { user.events ? user.events.filter((event) => new Date(event.eventDate).toDateString() == new Date().toDateString() ).map(event => 
+            { user.events && user.events.filter((event) => new Date(event.eventDate).toDateString() == new Date().toDateString() ).length > 0 
+            ? 
+            user.events.filter((event) => new Date(event.eventDate).toDateString() == new Date().toDateString() ).sort((a,b) => new Date(a.eventDate) > new Date(b.eventDate) ? 1 : -1 ).map(event => 
               <tr class="border-b bg-gray-800 border-gray-700 hover:bg-gray-600" key={event._id}>
                 <td class="px-6 py-4">
                   <Link to={`/events/${event._id}`}>{event.eventTitle}</Link>
@@ -68,10 +70,16 @@ const Dashboard = () => {
                   {event.players.length} / {event.maxPlayers}
                 </td>
                 <td class="px-6 py-4">
-                  {new Date(event.eventDate).toLocaleTimeString()}
+                  {new Date(event.eventDate).toLocaleTimeString([],{ timeStyle: 'short'})}
+                </td>
+              </tr>)
+              :
+              <tr>
+                <td colspan="4" className="text-center py-4"> 
+                  Nothing on the schedule for today. Check <Link to={"/search"} className=" md:hover:text-blue-500 text-white hover:bg-gray-700 hover:text-white">events</Link> for the full schedule!
                 </td>
               </tr>
-            ):null}
+            }
           </tbody>
         </table>
         </div>
@@ -95,7 +103,9 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-          { user.events ? user.events.filter((event) => afterToday(event.eventDate)).map(event => 
+          { user.events && user.events.filter((event) => afterToday(event.eventDate)).length > 0 
+            ? 
+            user.events.filter((event) => afterToday(event.eventDate)).sort((a,b) => new Date(a.eventDate) > new Date(b.eventDate) ? 1 : -1 ).map(event => 
               <tr class=" border-b bg-gray-800 border-gray-700 hover:bg-gray-600" key={event._id}>
                 <td class="px-6 py-4">
                   <Link to={`/events/${event._id}`}>{event.eventTitle}</Link>
@@ -107,11 +117,18 @@ const Dashboard = () => {
                   {event.players.length} / {event.maxPlayers}
                 </td>
                 <td class="px-6 py-4">
-                  {new Date(event.eventDate).toLocaleDateString()} @
-                  {new Date(event.eventDate).toLocaleTimeString()}
+                  {new Date(event.eventDate).toLocaleDateString() + " - "}
+                  {new Date(event.eventDate).toLocaleTimeString([], {timeStyle: 'short'})}
                 </td>
               </tr>
-            ):null}
+            )
+            :
+            <tr>
+              <td colspan="4" className="text-center py-4"> 
+                No future events. Check <Link to={"/search"} className=" md:hover:text-blue-500 text-white hover:bg-gray-700 hover:text-white">events</Link> for the full schedule!
+              </td>
+            </tr>
+          }
           </tbody>
         </table>
         </div>

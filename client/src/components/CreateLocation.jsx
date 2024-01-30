@@ -3,9 +3,8 @@ import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-// TODO: Add a cancel button
+// TODO: add a cancel button
 // TODO: color for error messages
-// TODO: Link to 'CreateLocation' not visible on my screen (white on white)
 
 const CreateLocation = () => {
   const navigate = useNavigate();

@@ -25,7 +25,7 @@ const Register = () => {
 
   const handleRegister = (e) => {
     e.preventDefault();
-      // TODO: eventually - first thing upon attempt to register would be to 'logout' if there is a cookie and sessionStorage
+      // TODO: eventually - maybe first thing upon attempt to register would be to 'logout' if there is a cookie and sessionStorage
       axios.post("http://localhost:8000/api/register", user, {withCredentials:true})
       .then((res) => {
         setAuth( {user: res.data.user})

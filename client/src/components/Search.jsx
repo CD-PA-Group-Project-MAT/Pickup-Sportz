@@ -23,11 +23,9 @@ function Search() {
   useEffect(() => {
     axios.get("http://localhost:8000/api/events", {withCredentials: true})
     .then(res => {
-      console.log("events")
-      console.log(res.data);
       setEventsList(res.data);
-      // TODO: By default filter res.data to today or later ??
-      setFilteredEvents(res.data);
+      const sortedEvents = res.data.sort((a,b) => new Date(a.eventDate) > new Date(b.eventDate) ? 1 : -1 )
+      setFilteredEvents(sortedEvents);
     })
     .catch(err => console.error(err))
   },[])
@@ -84,13 +82,13 @@ function Search() {
           }
         }
       }
-      setFilteredEvents(tempFilterEvents)
+      const sortedEvents = tempFilterEvents.sort((a,b) => new Date(a.eventDate) > new Date(b.eventDate) ? 1 : -1 )
+      setFilteredEvents(sortedEvents)
     })
     .catch(err=> console.error(err))
   }
 
   // TODO: Would be cool to add conditional styling for events that are in the past.
-  // TODO: Instead of add 'past' to options of 'join/drop/full' in actions column
   return (
     <div>
       <Navbar/>
@@ -120,19 +118,19 @@ function Search() {
                   {event.players.length} / {event.maxPlayers}
                 </td>
                 <td className="px-6 py-4">
-                  {new Date(event.eventDate).toLocaleDateString()} @
-                  {new Date(event.eventDate).toLocaleTimeString()}
+                  {new Date(event.eventDate).toLocaleDateString() + " "}
+                  {new Date(event.eventDate).toLocaleTimeString([],{ timeStyle: 'short'})}
                 </td>
                 <td className="px-6 py-4">
                   {event.creator.firstName} {event.creator.lastName} 
                 </td>
                 <td className="px-6 py-4">
-                  { userIsPlayer(event) ? 
-                    <span className="rounded  md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700 cursor-pointer" onClick={() => handleDrop(event._id)}>Drop</span>
+                  { new Date(event.eventDate) < new Date() ? <span className=" md:p-0 text-white dark:text-white border-gray-700">Past</span> : userIsPlayer(event) ? 
+                    <span className="rounded md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700 cursor-pointer" onClick={() => handleDrop(event._id)}>Drop</span>
                      :
-                     event.players.length >= event.maxPlayers ? "Full" 
+                     event.players.length >= event.maxPlayers ? <span className=" md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 dark:text-white md:hover:bg-transparent border-gray-700">Full</span> 
                      : 
-                     <span className=" md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 dark:text-white md:hover:bg-transparent border-gray-700" onClick={() => joinHandler(event._id)}>Join</span> } 
+                     <span className=" md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 dark:text-white md:hover:bg-transparent border-gray-700 cursor-pointer" onClick={() => joinHandler(event._id)}>Join</span> } 
                 </td>
               </tr>
             ):null}

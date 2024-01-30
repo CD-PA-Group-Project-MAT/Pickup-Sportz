@@ -27,7 +27,6 @@ const Navbar = () => {
           </div>
           <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border  rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 bg-gray-800 md:bg-gray-900 border-gray-700">
             <li>
-              {/* need to add route to nav */}
               <Link to="/"
                 className="block py-2 px-3 text-white rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
                 aria-current="page"
@@ -36,15 +35,6 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              {/* need to add route to nav */}
-              <Link to="/newEvent"
-                className="block py-2 px-3  rounded md:hover:bg-transparent md:p-0 md:hover:text-blue-500 text-white hover:bg-gray-700 hover:text-white border-gray-700"
-              >
-                Add Event
-              </Link>
-            </li>
-            <li>
-              {/* need to add route to nav */}
               <Link to="/search"
                 className="block py-2 px-3 rounded  md:hover:bg-transparent  md:p-0 md:hover:text-blue-500 text-white hover:bg-gray-700 hover:text-white border-gray-700"
               >
@@ -52,13 +42,20 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              {/* need to add route to nav */}
+              <Link to="/newEvent"
+                className="block py-2 px-3  rounded md:hover:bg-transparent md:p-0 md:hover:text-blue-500 text-white hover:bg-gray-700 hover:text-white border-gray-700"
+              >
+                Add Event
+              </Link>
+            </li>
+
+            {/* <li>
               <Link to="/"
                 className="block py-2 px-3 rounded  md:hover:bg-transparent md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white border-gray-700"
               >
                 My Events
               </Link>
-            </li>
+            </li> */}
             <li>
               <span
                 className="block py-2 px-3 rounded md:hover:bg-transparent md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white border-gray-700 cursor-pointer"
