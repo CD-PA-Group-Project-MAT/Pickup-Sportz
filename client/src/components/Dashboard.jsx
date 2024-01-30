@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import axios from "axios";
+import { Link } from "react-router-dom";
+
 
 const Dashboard = () => {
   const [ user, setUser ] = useState({}); // 'user' state holds the current user object
-  // const [ events, setEvents ] = useState([]); // 'events' state holds an array of ALL events in the DB
+
   const userFirstName = sessionStorage.getItem("userName") // User's first name retrieved from SessionStorage. It is placed there at registration or login
   const userId = sessionStorage.getItem("userId") // User's first name retrieved from SessionStorage. It is placed there at registration or login
 
@@ -29,19 +31,6 @@ const Dashboard = () => {
       )
       .catch((err) => console.error(err));
   }, []);
-
-  // This block populates an array of the entire database of events and sets 'events' state
-  // We actually won't use this on this page because events on this page will be coming from the 'user'
-  // but we will use it on the search' page
-  // useEffect(() => {
-  //   axios.get("http://localhost:8000/api/events", {withCredentials: true})
-  //   .then(res => {
-  //     console.log("events")
-  //     console.log(res.data);
-  //     setEvents(res.data);
-  //   })
-  //   .catch(err => console.error(err))
-  // },[])
 
   // todo: need to move tables down a bit, should be east enough. Also see if you can round off tables to make them look consistent with rest of UI (Tony you can ignore this comment its just so I remember)
 
@@ -70,7 +59,7 @@ const Dashboard = () => {
             { user.events ? user.events.filter((event) => new Date(event.eventDate).toDateString() == new Date().toDateString() ).map(event => 
               <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" key={event._id}>
                 <td class="px-6 py-4">
-                  {event.eventTitle}
+                  <Link to={`/events/${event._id}`}>{event.eventTitle}</Link>
                 </td>
                 <td class="px-6 py-4">
                   {event.location.locationName}
@@ -109,7 +98,7 @@ const Dashboard = () => {
           { user.events ? user.events.filter((event) => afterToday(event.eventDate)).map(event => 
               <tr class=" border-b bg-gray-800 border-gray-700 hover:bg-gray-600" key={event._id}>
                 <td class="px-6 py-4">
-                  {event.eventTitle}
+                  <Link to={`/events/${event._id}`}>{event.eventTitle}</Link>
                 </td>
                 <td class="px-6 py-4">
                   {event.location.locationName}

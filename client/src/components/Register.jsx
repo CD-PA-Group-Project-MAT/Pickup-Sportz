@@ -2,11 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios'
 import toISODateString from "../utils/toISOdateString";
-
-// TODO: required - add validation error messages in appropriate places in form
+import useAuth from "../hooks/useAuth";
 
 const Register = () => {
-
+  const {setAuth} = useAuth();
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]);
   const defaultBirthday = toISODateString(new Date())
@@ -29,9 +28,10 @@ const Register = () => {
       // TODO: eventually - first thing upon attempt to register would be to 'logout' if there is a cookie and sessionStorage
       axios.post("http://localhost:8000/api/register", user, {withCredentials:true})
       .then((res) => {
+        setAuth( {user: res.data.user})
         sessionStorage.setItem('userName', res.data.user.firstName)
         sessionStorage.setItem('userId', res.data.user._id)
-        navigate("/dashboard");
+        navigate("/");
       })
       .catch(err => {
         setErrors(err.response.data.errors)

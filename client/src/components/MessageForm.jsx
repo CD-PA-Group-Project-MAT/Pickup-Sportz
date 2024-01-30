@@ -1,14 +1,15 @@
 import axios from 'axios';
 import { useState } from 'react';
+import useAuth from '../hooks/useAuth';
 
 
 function MessageForm(props) {
-  const {id} = props;
-  const userId = sessionStorage.getItem("userId") // User's first name retrieved from SessionStorage. It is placed there at registration or login
-
+  const {id, messages, setMessages} = props;
+  const { auth } = useAuth();
+  const [errors, setErrors] = useState([]);
   const [ message, setMessage ] = useState({
     messageContent : "",
-    author : userId,
+    author : auth.user._id,
     event : id
   })
 
@@ -16,16 +17,21 @@ function MessageForm(props) {
     e.preventDefault();
     console.log("add new message")
     axios.post("http://localhost:8000/api/messages", message, {withCredentials:true})
-    .then(res => console.log(res))
-    .catch(err => console.error(err))
+    .then(res => {
+      let tempMessage = res.data;
+      tempMessage.author = auth.user
+      setMessages([...messages, {...res.data, author : auth.user}])
+      setMessage({...message, messageContent : ""})
+    })
+    .catch(err => setErrors(err.response.data.errors))
   }
-
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <label htmlFor="">Add message</label>
         <input type="text" name="messageContent" value={message.messageContent} onChange={(e) => setMessage({...message, [e.target.name] : e.target.value})}/>
+        {errors.messageContent ? <p>{errors.messageContent.message}</p> : null}
         <button type="submit">Submit</button>
       </form>
     </div>

@@ -3,9 +3,10 @@ import Navbar from "./Navbar"
 import axios from 'axios'
 import SearchForm from "./SearchForm"
 import { Link } from "react-router-dom"
+import useAuth from "../hooks/useAuth"
 
 function Search() {
-
+  const { auth } = useAuth();
   const [eventsList,setEventsList] = useState([])
   const [filteredEvents, setFilteredEvents] = useState([])
   const userId = sessionStorage.getItem("userId") // User's first name retrieved from SessionStorage. It is placed there at registration or login
@@ -25,34 +26,71 @@ function Search() {
       console.log("events")
       console.log(res.data);
       setEventsList(res.data);
-      // TODO: By default filter res.data to today or later
+      // TODO: By default filter res.data to today or later ??
       setFilteredEvents(res.data);
     })
     .catch(err => console.error(err))
   },[])
 
-  // Handle click on "join" link
+  /* Here's where we handle a click on a 'join' link */
   function joinHandler(eventId){
-    console.log("clicked join")
     axios.patch(`http://localhost:8000/api/events/join/${eventId}/player/${userId}`,{} ,{withCredentials : true})
     .then(res => {
-      // update events
-      // update filtered events
-      
-    })
-    .catch(err=> console.error(err))
-  }
-  // Handle click on "Drop" link
-  function dropHandler(eventId){
-    console.log("clicked drop")
-    axios.patch(`http://localhost:8000/api/events/drop/${eventId}/player/${userId}`,{} ,{withCredentials : true})
-    .then(res => {
-      // update events
-      // update filtered events
+      // I feel like there has to be a more elegant way to do the following
+      // But I'm running out of energy 
+      let tempEventsList = [...eventsList]
+      for ( let i=0; i < tempEventsList.length; i++){
+        if (tempEventsList[i]._id === eventId){
+          tempEventsList[i].players.push(auth.user)
+        }
+      }
+      setEventsList(tempEventsList)
+      let tempFilterEvents = [...filteredEvents]
+      for ( let i=0; i < tempFilterEvents.length; i++){
+        if (tempFilterEvents[i]._id === eventId){
+          tempFilterEvents[i].players.push(auth.user)
+        }
+      }
+      setFilteredEvents(tempFilterEvents)
     })
     .catch(err=> console.error(err))
   }
 
+  /* Here's where we handle a click on a 'drop' link */
+  function handleDrop(eventId){
+    axios.patch(`http://localhost:8000/api/events/drop/${eventId}/player/${userId}`,{} ,{withCredentials : true})
+    .then(res => {
+      // I feel like there has to be a more elegant way to do the following
+      // But I'm running out of energy 
+      let tempEventsList = [...eventsList]
+      for ( let i=0; i < tempEventsList.length; i++){
+        if (tempEventsList[i]._id === eventId){
+          for (let j = 0; j < tempEventsList[i].players.length ; j++){
+            if (tempEventsList[i].players[j]._id === userId) {
+              tempEventsList[i].players.splice(j)
+            }
+          }
+        }
+      }
+      setEventsList(tempEventsList)
+
+      let tempFilterEvents = [...filteredEvents]
+      for ( let i=0; i < tempFilterEvents.length; i++){
+        if (tempFilterEvents[i]._id === eventId){
+          for (let j = 0; j < tempFilterEvents[i].players.length ; j++){
+            if (tempFilterEvents[i].players[j]._id === userId) {
+              tempFilterEvents[i].players.splice(j)
+            }
+          }
+        }
+      }
+      setFilteredEvents(tempFilterEvents)
+    })
+    .catch(err=> console.error(err))
+  }
+
+  // TODO: Would be cool to add conditional styling for events that are in the past.
+  // TODO: Instead of add 'past' to options of 'join/drop/full' in actions column
   return (
     <div>
       <Navbar/>
@@ -90,7 +128,7 @@ function Search() {
                 </td>
                 <td className="px-6 py-4">
                   { userIsPlayer(event) ? 
-                    <span className="rounded  md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700 cursor-pointer" onClick={() => dropHandler(event._id)}>Drop</span>
+                    <span className="rounded  md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white md:hover:bg-transparent border-gray-700 cursor-pointer" onClick={() => handleDrop(event._id)}>Drop</span>
                      :
                      event.players.length >= event.maxPlayers ? "Full" 
                      : 

@@ -1,11 +1,10 @@
-
 function MessageDisplay(props) {
   const { messages, setMessages } = props;
 
   return (
     <div>
-       Display messages here
-      {messages.map(message => <p key={message._id}>{message.messageContent}</p>)}
+       <p>Messages:</p>
+      {messages.map(message => <p key={message._id}>{message.author.firstName}: {message.messageContent}</p>)}
     </div>
   )
 }
