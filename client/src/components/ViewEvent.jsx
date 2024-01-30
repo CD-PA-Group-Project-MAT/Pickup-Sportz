@@ -69,7 +69,7 @@ const ViewEvent = () => {
               
           </div>
         </div>
-        {/* Messages div - keeping separate in case we want to scap api and use these in that window instead.*/}
+        {/* Messages div - keeping separate in case we want to scape api and use these in that window instead.*/}
     </div>
   );
 };

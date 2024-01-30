@@ -10,6 +10,20 @@ import Layout from "./components/Layout.jsx";
 import RequireAuth from "./components/RequireAuth.jsx";
 import Missing from "./components/Missing.jsx";
 
+/*
+  All routes are wrapped in 'Layout' component.
+  The layout component simply passes through whatever component has a matching path
+  using <Outlet/>. <Outlet/> basically is a placeholder in the jsx return that shows where
+  to put the component that is being passed through. 
+
+  Protected routes are additionally wrapped in 'RequireAuth' component.
+  In 'RequireAuth' we are using conditional rendering of <Outlet/>. If there is a user
+  present in our 'auth' (AuthContext), then we pass through the request route (<Outlet/>)
+  If auth.user is *not* present, then we Navigate back to /login, requiring the user
+  to log in (thereby populating 'auth.user') before they can try again.
+
+ */
+
 function App() {
   return (
     <Routes>

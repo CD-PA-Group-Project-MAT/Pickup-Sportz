@@ -4,10 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toISODateString from "../utils/toISOdateString";
 
-// I think I've been staring at this for too long. Need to figure out a way to pass date into state. I am not sure if an empty string is the right move. Also having trouble passing in user into the form. Maybe a hidden input field? I left a note down by location with the form. Not sure how to add value in there. Mapping all of the locations into the select field properly though.
-
-// TODO: Add a cancel button
-// TODO: color for error messages
+// Maybe add a cancel button?
+// TODO: color for validation error messages
 
 const CreateEvent = () => {
   const userId = sessionStorage.getItem("userId"); // User's first name retrieved from SessionStorage. It is placed there at registration or login
@@ -69,8 +67,8 @@ const CreateEvent = () => {
     e.preventDefault();
     axios.post("http://localhost:8000/api/events", event, {withCredentials:true})
     .then(res => {
-      console.log(res)
-      navigate('/')
+      // console.log(res)
+      navigate('/search')
     })
     .catch(err => {
       console.error(err.response.data.errors);

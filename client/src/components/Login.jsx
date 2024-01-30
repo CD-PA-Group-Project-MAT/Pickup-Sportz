@@ -7,20 +7,20 @@ const Login = () => {
   const { setAuth } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || "/"; // So here we are defining where we will 'navigate to' after a successful login. If the user was redirected here from 'RequireAuth' there should be a path saved in state that we can use. Otherwise, we navigate to '/' (which is the dashboard)
   const [errorMessage, setErrorMessage] = useState("");
   const [email,setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const loginHandler = (e) =>  {
       e.preventDefault();
-      // TODO: eventually - first thing upon attempt to login would be to 'logout' if there is a cookie and sessionStorage
+      // TODO: eventually - maybe first thing upon attempt to login would be to 'logout' if there is a cookie and sessionStorage
       axios.post("http://localhost:8000/api/login", { email, password}, { withCredentials : true }) 
       .then((res) => {
         setAuth( {user: res.data.user})
         sessionStorage.setItem('userName', res.data.user.firstName)
         sessionStorage.setItem('userId', res.data.user._id)
-        navigate(from, { replace: true });
+        navigate(from, { replace: true }); // The idea here is that are we go to the location requested but cut off by the RequireAuth.jsx page before user was redirected to Login
       } )
       .catch(err => {
         setErrorMessage(err.response.data.message)
