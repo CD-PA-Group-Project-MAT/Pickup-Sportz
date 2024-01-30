@@ -36,38 +36,40 @@ const ViewEvent = () => {
   //   todo: need to finish styling. Have the div's in order just need to set up my text boxes. Tony, if you have any ideas on how to make this look better, please feel free to let me know. Not sure where we stand on bringing in that api just yet.
 
   return (
-    <div>
+    <div className="">
       {/* nav */}
       <div>
         <Navbar />
       </div>
       {/* everything wrapper - gonna flex info and messages so they are side by side */}
-      <div className="flex flex-row justify-evenly my-20">
+      <div className="flex flex-row flex-wrap justify-evenly mt-4 mb-10">
         {/* wrapper for card */}
-        <div className=" text-white border border-gray-700 w-80">
+        <div className=" text-white border border-gray-700 rounded-lg w-80 p-5">
           {/* title */}
           <div>
             <h2>{event.eventTitle}</h2>
-          </div>
-          {/* date */}
-          <div>{event.eventDate}</div>
-          {/* location */}
-          <div>
-            {event.location?.locationName}{" "}
-            {/*  Using 'optional chaining here' */}
+            <h2>{event.eventDate}</h2>
+            <h2>{event.location?.locationName}{" "}</h2>
+            <hr className="w-48 h-1 mx-auto my-4 bg-gray-700 border-0 rounded md:my-10"/>
           </div>
           {/* details */}
-          <div>{event.eventDetails}</div>
-        </div>
-
-        {/* Messages div - keeping separate in case we want to scap api and use these in that window instead.*/}
-        <div className=" text-white">
           <div>
-            <MessageDisplay messages={messages} setMessages={setMessages} />
-            <MessageForm id={id} messages={messages} setMessages={setMessages} />
+            <p>{event.eventDetails}</p>
+            </div>
+        </div>
+        </div>
+        <div className="flex justify-center">
+          <div className=" text-white border w-1/2 h-96 border-gray-700 rounded-lg p-5 flex flex-col bg-gray-700">
+              <div className="overflow-auto h-72">
+                <MessageDisplay messages={messages} setMessages={setMessages} />
+              </div>
+              <div>
+                <MessageForm  id={id} messages={messages} setMessages={setMessages} />
+              </div>
+              
           </div>
         </div>
-      </div>
+        {/* Messages div - keeping separate in case we want to scap api and use these in that window instead.*/}
     </div>
   );
 };
