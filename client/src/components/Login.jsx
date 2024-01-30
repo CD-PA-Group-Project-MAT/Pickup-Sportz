@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import useAuth from '../hooks/useAuth';
 
 const Login = () => {
-
+  const { setAuth } = useAuth();
   const navigate = useNavigate();
-  const [errors, setErrors] = useState("");
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const [errorMessage, setErrorMessage] = useState("");
   const [email,setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,16 +17,16 @@ const Login = () => {
       // TODO: eventually - first thing upon attempt to login would be to 'logout' if there is a cookie and sessionStorage
       axios.post("http://localhost:8000/api/login", { email, password}, { withCredentials : true }) 
       .then((res) => {
+        setAuth( {user: res.data.user})
         sessionStorage.setItem('userName', res.data.user.firstName)
         sessionStorage.setItem('userId', res.data.user._id)
-        navigate('/dashboard');
+        navigate(from, { replace: true });
       } )
       .catch(err => {
-        setErrors(err.response.data.message)
+        setErrorMessage(err.response.data.message)
       })
   }
 
-  // TODO: current - Add display of validation errors
   return (
     <section className="bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -41,6 +44,7 @@ const Login = () => {
                         <label htmlFor="password" className="block mb-2 text-sm font-medium text-white" >Password</label>
                         <input type="password" name="password" id="password" placeholder="••••••••" className=" border sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" required="" value={password} onChange={(e) => setPassword(e.target.value)}/>
                     </div>
+                    {errorMessage ? <p>{errorMessage}</p> : null}
                     <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:bg-primary-700 focus:ring-primary-800">Sign in</button>
                     <p className="text-sm font-light text-gray-400">
                         Don’t have an account yet? <Link to="/register" className="font-medium text-primary-500 hover:underline ">Sign up</Link>

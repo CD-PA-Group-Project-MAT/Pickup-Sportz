@@ -1,8 +1,13 @@
+require('dotenv').config()
+
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-// TODO const SECRET = process.env.SECRET_KEY // For production/deployment
-const SECRET = "secret_key" // For development
+// TODO const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET // For production/deployment
+// TODO const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET // For production/deployment
+const REFRESH_TOKEN_SECRET = "secret_key" // For development
+const ACCESS_TOKEN_SECRET = "secret_key" // For development
+
 
 module.exports = {
 
@@ -27,7 +32,7 @@ module.exports = {
       } else {
         const newUser = await User.create(req.body)
         // *The first value passed into jwt.sign is the 'payload'. This can be retrieved in jwt.verify
-        const userToken = jwt.sign({ _id : newUser._id, email : newUser.email }, SECRET, { expiresIn: '12h' });  // Token expires in 12 hours
+        const userToken = jwt.sign({ _id : newUser._id, email : newUser.email }, ACCESS_TOKEN_SECRET, { expiresIn: '12h' });  // Token expires in 12 hours
         res
           .status(201)
           .cookie("userToken", userToken, { httpOnly: true, maxAge : 12*60*60*1000}) // Cookie maxAge = 12 hours from now
@@ -51,10 +56,11 @@ module.exports = {
         if(isCorrectPW) {                                             // Password was a match!
           // console.log("password is correct")
           // *The first value passed into jwt.sign is the 'payload'. This can be retrieved in jwt.verify
-          const userToken = jwt.sign({_id: user._id, email:user.email}, SECRET, {expiresIn:'2h'});  // PW is a match! Define userToken
+          // TODO extended the expiration times for development...
+          const userToken = jwt.sign({_id: user._id, email:user.email}, ACCESS_TOKEN_SECRET, {expiresIn:'12h'});  // PW is a match! Define userToken
           res
             .status(201)
-            .cookie('userToken', userToken, {httpOnly:true, maxAge: 2*60*60*1000})
+            .cookie('userToken', userToken, {httpOnly:true, maxAge: 12*60*60*1000})
             .json({msg: "success!", user : user})
         } else {                                                      // Password was NOT a match
           res.status(400).json({message:"Invalid Credentials"});

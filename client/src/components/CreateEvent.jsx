@@ -70,7 +70,7 @@ const CreateEvent = () => {
     axios.post("http://localhost:8000/api/events", event, {withCredentials:true})
     .then(res => {
       console.log(res)
-      navigate('/dashboard')
+      navigate('/')
     })
     .catch(err => {
       console.error(err.response.data.errors);
@@ -166,7 +166,6 @@ const CreateEvent = () => {
                 ) : null}
               </div>
               {/* event location */}
-              {/* having trouble with getting that event value squared away for location. Mapped into the select fine. */}
               <div>
                 <label
                   htmlFor="location"
