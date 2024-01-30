@@ -27,13 +27,15 @@ function MessageForm(props) {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="">Add message</label>
-        <input type="text" name="messageContent" value={message.messageContent} onChange={(e) => setMessage({...message, [e.target.name] : e.target.value})}/>
-        {errors.messageContent ? <p>{errors.messageContent.message}</p> : null}
-        <button type="submit">Submit</button>
-      </form>
+    <div className=''>
+      <div className=''>
+        <form className="flex flex-row mt-4 justify-between"onSubmit={handleSubmit}>
+          
+          <input className="text-white bg-gray-500 w-10/12 rounded-lg h-10"type="text" name="messageContent" placeholder='type your message here' value={message.messageContent} onChange={(e) => setMessage({...message, [e.target.name] : e.target.value})}/>
+          
+          <button className='border border-gray-500 rounded-lg w-36' type="submit">Send</button>
+        </form>
+      </div>
     </div>
   )
 }

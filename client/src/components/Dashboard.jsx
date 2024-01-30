@@ -46,8 +46,8 @@ const Dashboard = () => {
         </div>
         {/* Todays events table */}
         <div className="flex relative overflow-x-auto shadow-md justify-center sm:rounded-lg">
-        <table className="w-1/2 text-sm text-left rtl:text-right  text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table className="w-1/2 text-sm text-left rtl:text-right  text-gray-400 ">
+          <thead className="text-xs uppercase bg-gray-700 text-gray-400">
             <tr>
               <th scope="col" class="px-6 py-3">Event Name</th>
               <th scope="col" class="px-6 py-3">Location</th>
@@ -57,7 +57,7 @@ const Dashboard = () => {
           </thead>
           <tbody>
             { user.events ? user.events.filter((event) => new Date(event.eventDate).toDateString() == new Date().toDateString() ).map(event => 
-              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" key={event._id}>
+              <tr class="border-b bg-gray-800 border-gray-700 hover:bg-gray-600" key={event._id}>
                 <td class="px-6 py-4">
                   <Link to={`/events/${event._id}`}>{event.eventTitle}</Link>
                 </td>
