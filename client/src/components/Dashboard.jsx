@@ -38,15 +38,15 @@ const Dashboard = () => {
   return (
     <div>
       {<Navbar />}
-      <div className="space-y-4">
-        <div>
+      <div className="space-y-36">
+        <div className="mt-20">
         {/* Your Events Title */}
-        <div className="flex relative justify-center">
-          <h1 className="text-xl text-white">Get your game on today, {userFirstName}:</h1>
+        <div className="flex relative justify-center mb-3">
+          <h1 className="text-4xl text-white">Get your game on today, {userFirstName}:</h1>
         </div>
         {/* Todays events table */}
         <div className="flex relative overflow-x-auto shadow-md justify-center sm:rounded-lg">
-        <table className="w-1/2 text-sm text-left rtl:text-right  text-gray-400 ">
+        <table className="w-1/2 text-sm text-left rtl:text-right border border-separate rounded-lg text-gray-400 ">
           <thead className="text-xs uppercase bg-gray-700 text-gray-400">
             <tr>
               <th scope="col" class="px-6 py-3">Event Name</th>
@@ -88,12 +88,12 @@ const Dashboard = () => {
         {/* upcoming events h1 */}
         
         <div>
-        <div className="flex relative justify-center">
-          <h1 className="text-xl text-white">Upcoming Events</h1>
+        <div className="flex relative justify-center mb-4">
+          <h1 className="text-4xl text-white">Upcoming Events:</h1>
         </div>
         {/* upcoming events table */}
-        <div className="flex relative overflow-x-auto shadow-md justify-center sm:rounded-lg">
-        <table className="w-1/2 text-sm text-left rtl:text-right  text-gray-400">
+        <div className="flex relative overflow-x-auto shadow-md justify-center rounded-lg">
+        <table className="w-1/2 text-sm text-left rtl:text-right border border-separate rounded-lg text-gray-400">
           <thead className="text-xs  uppercase bg-gray-700 text-gray-400">
             <tr>
               <th scope="col" class="px-6 py-3">Event Name</th>

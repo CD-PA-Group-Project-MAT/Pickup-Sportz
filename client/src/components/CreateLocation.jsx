@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-// TODO: add a cancel button
-// TODO: color for error messages
+// TODO: add a cancel button - added
+// TODO: color for error messages -- added
 
 const CreateLocation = () => {
   const navigate = useNavigate();
@@ -62,7 +62,7 @@ const CreateLocation = () => {
                   onChange={handleChange}
                 />
                 {errors.locationName ? (
-                  <p>{errors.locationName.message}</p>
+                  <p className="text-red-600">{errors.locationName.message}</p>
                 ) : null}
               </div>
               {/* location address */}
@@ -129,7 +129,7 @@ const CreateLocation = () => {
                 <div className="py-1">
                   <button
                     type="submit"
-                    className=" border border-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 text-white"
+                    className=" border border-gray-700 text-sm rounded-lg hover:bg-blue-500 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 text-white"
                   >
                     Create Location
                   </button>
@@ -137,7 +137,11 @@ const CreateLocation = () => {
               </div>
             </form>
           </div>
+          {/* cancel button */}
         </div>
+          <div className="mt-3">
+                  <Link to="/newEvent"> <button className="border border-gray-700 text-sm hover:bg-red-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 text-white">Cancel</button></Link>
+          </div>
       </div>
     </div>
   );

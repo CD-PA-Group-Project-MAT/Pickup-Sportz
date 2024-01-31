@@ -103,7 +103,7 @@ const CreateEvent = () => {
                   required="" value={event.eventTitle} onChange={handleChange}
                 />
                 {errors.eventTitle ? (
-                  <p>{errors.eventTitle.message}</p>
+                  <p className="text-red-600">{errors.eventTitle.message}</p>
                 ) : null}
               </div>
               {/* event date */}
@@ -160,7 +160,7 @@ const CreateEvent = () => {
                   required="" value={event.maxPlayers} onChange={handleChange}
                 />
                 {errors.maxPlayers ? (
-                  <p className="text-white">{errors.maxPlayers.message}</p>
+                  <p className="text-red-600">{errors.maxPlayers.message}</p>
                 ) : null}
               </div>
               {/* event location */}
@@ -182,14 +182,14 @@ const CreateEvent = () => {
                   ))}
                 </select>
                 {errors.location ? (
-                  <p>{errors.location.message}</p>
+                  <p className="text-red-600">{errors.location.message}</p>
                 ) : null}
               </div>
               {/* submit form (button)*/}
               <div className="py-1">
                 <button
                   type="submit"
-                  className="border border-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 text-white"
+                  className="border border-gray-700 text-sm rounded-lg hover:bg-blue-500 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 text-white"
                 >
                   Create Event
                 </button>
