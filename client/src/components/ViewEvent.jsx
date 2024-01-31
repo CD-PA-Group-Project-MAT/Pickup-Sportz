@@ -45,15 +45,15 @@ const ViewEvent = () => {
         <Navbar />
       </div>
       {/* everything wrapper - gonna flex info and messages so they are side by side */}
-      <div className="flex flex-row flex-wrap justify-evenly mt-4 mb-10">
+      <div className="flex flex-row flex-wrap justify-evenly mt-5 mb-10">
         {/* wrapper for card */}
-        <div className=" text-white border border-gray-700 rounded-lg w-80 p-5">
+        <div className=" text-white border border-gray-700 bg-gray-700 rounded-lg w-80 p-5">
           {/* title */}
           <div>
             <h2>{event.eventTitle}</h2>
             <h2>{event.eventDate}</h2>
             <h2>{event.location?.locationName}{" "}</h2>
-            <hr className="w-48 h-1 mx-auto my-4 bg-gray-700 border-0 rounded md:my-10"/>
+            <hr className="w-48 h-1 mx-auto my-4 bg-gray-400 border-0 rounded md:my-10"/>
           </div>
           {/* details */}
           <div>
