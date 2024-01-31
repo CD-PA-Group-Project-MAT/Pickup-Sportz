@@ -4,6 +4,8 @@ import axios from 'axios'
 import toISODateString from "../utils/toISOdateString";
 import useAuth from "../hooks/useAuth";
 
+// set colors for error messages and fixed routing issue causing back to sign in to route to dashboard
+
 const Register = () => {
   const {setAuth} = useAuth();
   const navigate = useNavigate();
@@ -52,36 +54,36 @@ const Register = () => {
             <div>
                 <label htmlFor="firstName" className="block mb-2 text-sm font-medium text-white">First Name</label>
                 <input  name="firstName" id="firstName" className=" sm:text-sm rounded-lg focus:ring-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="John" required="" value={user.firstName} onChange={handleChange}/>
-                {errors.firstName ? <p>{errors.firstName.message}</p> : null}
+                {errors.firstName ? <p className="text-red-500">{errors.firstName.message}</p> : null}
             </div>
             <div>
                 <label htmlFor="lastName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
                 <input  name="lastName" id="lastName" className="sm:text-sm rounded-lg focus:ring-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="Doe" required="" value={user.lastName} onChange={handleChange}/>
-                {errors.lastName ? <p>{errors.lastName.message}</p> : null}
+                {errors.lastName ? <p className="text-red-500">{errors.lastName.message}</p> : null}
             </div>
             <div>
                 <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
                 <input type="email" name="email" id="email" className="sm:text-sm rounded-lg focus:ring-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="name@email.com" required="" value={user.email} onChange={handleChange}/>
-                {errors.email ? <p>{errors.email.message}</p> : null}
+                {errors.email ? <p className="text-red-500">{errors.email.message}</p> : null}
             </div>
             <div>
                 <label htmlFor="birthday" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your birthday</label>
                 <input type="date" name="birthday" id="birthday" className="sm:text-sm rounded-lg focus:ring-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="name@birthday.com" required="" value={user.birthday} onChange={handleChange}/>
-                {errors.birthday ? <p>{errors.birthday.message}</p> : null}
+                {errors.birthday ? <p className="text-red-500">{errors.birthday.message}</p> : null}
             </div>
             <div>
                 <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                 <input type="password" name="password" id="password" placeholder="••••••••" className="sm:text-sm rounded-lg focus:ring-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" required="" value={user.password} onChange={handleChange}/>
-                {errors.password ? <p>{errors.password.message}</p> : null}
+                {errors.password ? <p className="text-red-500">{errors.password.message}</p> : null}
             </div>
             <div>
                 <label htmlFor="confirmPassword" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Confirm Password</label>
                 <input type="password" name="confirmPassword" id="confirmPassword" placeholder="••••••••" className="sm:text-sm rounded-lg focus:ring-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" required="" value={user.confirmPassword} onChange={handleChange}/>
-                {errors.confirmPassword ? <p>{errors.confirmPassword.message}</p> : null}
+                {errors.confirmPassword ? <p className="text-red-500">{errors.confirmPassword.message}</p> : null}
             </div>
             <button type="submit" className="w-full text-white focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800">Sign up!</button>
             <p className="text-sm font-light text-gray-400">
-                Already have an account? <Link to="/" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign in</Link>
+                Already have an account? <Link to="/login" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign in</Link>
             </p>
         </form>
     </div>

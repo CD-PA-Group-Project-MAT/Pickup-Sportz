@@ -16,7 +16,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className=" border-gray-200 bg-gray-900">
+    <nav className=" border-gray-700 bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">
           Pickup Sportz
@@ -28,7 +28,7 @@ const Navbar = () => {
           <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border  rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 bg-gray-800 md:bg-gray-900 border-gray-700">
             <li>
               <Link to="/"
-                className="block py-2 px-3 text-white rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
+                className="block py-2 px-3 text-white rounded md:bg-transparent p-0 hover:text-blue-500 md:p-0"
                 aria-current="page"
               >
                 Home
