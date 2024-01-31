@@ -1,10 +1,12 @@
 
 import { Link, useNavigate } from "react-router-dom";
-// import useRefreshToken from "../hooks/useRefreshToken";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useAuth from "../hooks/useAuth"; 
 
 const Navbar = () => {
-  // const refresh = useRefreshToken();
+  const { auth, setAuth } = useAuth();
+  // console.log("auth:")
+  // console.log(auth)
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const logoutUser = () => {
@@ -13,6 +15,7 @@ const Navbar = () => {
       .then((res) => {      
         sessionStorage.removeItem("userName");                                  // This clears sessionStorage
         sessionStorage.removeItem("userId");                                  // This clears sessionStorage
+        // setAuth({}) // TEMP <--- I don't think this is necessary
         navigate("/login");
       })
       .catch((err) => console.error("error logging out" + err));
@@ -51,14 +54,6 @@ const Navbar = () => {
                 Add Event
               </Link>
             </li>
-
-            {/* <li>
-              <button onClick={()=>{(refresh())}}
-                className="block py-2 px-3 rounded  md:hover:bg-transparent md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white border-gray-700"
-              >
-                Refresh
-              </button>
-            </li> */}
             <li>
               <span
                 className="block py-2 px-3 rounded md:hover:bg-transparent md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white border-gray-700 cursor-pointer"

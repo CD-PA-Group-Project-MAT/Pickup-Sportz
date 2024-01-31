@@ -8,12 +8,17 @@ const jwt = require("jsonwebtoken");
 const REFRESH_TOKEN_SECRET = "secret_key" // For development
 const ACCESS_TOKEN_SECRET = "secret_key" // For development
 
+const ACCESS_TOKEN_DURATION = '5m'
+const REFRESH_TOKEN_DURATION = '7d'
+const ACCESS_COOKIE_MAXAGE = 1*60*60*1000
+const REFRESH_COOKIE_MAXAGE = 30*12*60*60*1000
+
 function generateAccessToken(user) {
-  const accessToken = jwt.sign({ _id : user._id, email : user.email }, ACCESS_TOKEN_SECRET, { expiresIn: '5m' });  // User token expires in 5 minutes
+  const accessToken = jwt.sign({ _id : user._id, email : user.email }, ACCESS_TOKEN_SECRET, { expiresIn: ACCESS_TOKEN_DURATION });
   return accessToken;
 }
 function generateRefreshToken(user) {
-  const refreshToken = jwt.sign({ _id : user._id, email : user.email }, REFRESH_TOKEN_SECRET, {expiresIn: '7d'});  // Refresh token expires in 7 days
+  const refreshToken = jwt.sign({ _id : user._id, email : user.email }, REFRESH_TOKEN_SECRET, {expiresIn: REFRESH_TOKEN_DURATION}); 
   return refreshToken;
 }
 
@@ -21,16 +26,16 @@ module.exports = {
   refreshToken : async (req,res) => {
     // console.log("getting to refreshToken")
     try {
-      const currentUser = {_id : req.body.userId, email: ""}; // TODO MAYBE get rid of email in token payload ?????
-      // const currentUser = await User.findOne({_id : req.body.userId});
+      // const currentUser = {_id : req.body.userId, email: ""}; // TODO MAYBE get rid of email in token payload ?????
+      const currentUser = await User.findOne({_id : req.body.userId});
       // console.log("currentUser ");
       // console.log(currentUser);
       const accessToken = await generateAccessToken(currentUser);
       console.log("Refreshing Access Token")
       res
         .status(201)
-        .cookie("accessToken", accessToken, { httpOnly: true, maxAge : 1*60*60*1000}) // Cookie maxAge = 1 hour from now
-        .json({msg: "Refreshed accessToken!", user : currentUser, accessToken : accessToken })
+        .cookie("accessToken", accessToken, { httpOnly: true, maxAge : ACCESS_COOKIE_MAXAGE}) // Cookie maxAge = 1 hour from now
+        .json({msg: "Refreshed accessToken", user : currentUser, accessToken : accessToken })
     } catch(err) {
       res.status(400).json(err)
     }
@@ -48,9 +53,9 @@ module.exports = {
         const refreshToken = generateRefreshToken(newUser);  
         res
           .status(201)
-          .cookie("accessToken", accessToken, { httpOnly: true, maxAge : 1*60*60*1000}) 
-          .cookie("refreshToken", refreshToken, { httpOnly: true, maxAge : 12*60*60*1000}) 
-          .json({msg: "success!", user : newUser, accessToken : accessToken})
+          .cookie("accessToken", accessToken, { httpOnly: true, maxAge : ACCESS_COOKIE_MAXAGE}) 
+          .cookie("refreshToken", refreshToken, { httpOnly: true, maxAge : REFRESH_COOKIE_MAXAGE}) 
+          .json({msg: "Successful user registration", user : newUser, accessToken : accessToken})
       }
     }
     catch(err) {
@@ -62,23 +67,18 @@ module.exports = {
     try {
       const user = await User.findOne({ email: req.body.email });     // Search for the given email
       if (user === null) {                                            // Email NOT found in 'users' collection
-        // console.log("email not found in collection")
         res.status(400).json({message:"Invalid Credentials"});
       } else {
         const isCorrectPW = await bcrypt.compare(req.body.password, user.password); // compare PW given with PW hash in DB
-        // console.log("completed bcrypt.compare")
         if(isCorrectPW) {                                             // Password was a match!
-          // console.log("password is correct")
           // *The first value passed into jwt.sign is the 'payload'. This can be retrieved in jwt.verify
-          // TODO extended the expiration times for development...
-          // const accessToken = jwt.sign({_id: user._id, email:user.email}, ACCESS_TOKEN_SECRET, {expiresIn:'12h'});  // PW is a match! Define accessToken
           const accessToken = generateAccessToken(user);
           const refreshToken = generateRefreshToken(user);  
           res
             .status(201)
-            .cookie('accessToken', accessToken, {httpOnly:true, maxAge: 1*60*60*1000})
-            .cookie("refreshToken", refreshToken, { httpOnly: true, maxAge : 12*60*60*1000})
-            .json({msg: "success!", user : user, accessToken : accessToken})
+            .cookie('accessToken', accessToken, {httpOnly:true, maxAge: ACCESS_COOKIE_MAXAGE})
+            .cookie("refreshToken", refreshToken, { httpOnly: true, maxAge : REFRESH_COOKIE_MAXAGE})
+            .json({msg: "Successful login", user : user, accessToken : accessToken})
         } else {                                                      // Password was NOT a match
           res.status(400).json({message:"Invalid Credentials"});
         }
@@ -90,6 +90,7 @@ module.exports = {
   },
     
   logout: (req, res) => {
+    res.clearCookie('refreshToken');
     res.clearCookie('accessToken');
     res.sendStatus(200);                                              // Apparently, this is the equivalent of res.status(200).send('OK')
   },

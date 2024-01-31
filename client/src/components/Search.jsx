@@ -8,10 +8,11 @@ import useAxiosPrivate from "../hooks/useAxiosPrivate"
 function Search() {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
-  const [eventsList,setEventsList] = useState([])
   const navigate = useNavigate();
   const location = useLocation();
+  const [eventsList,setEventsList] = useState([])
   const [filteredEvents, setFilteredEvents] = useState([])
+  const [toggleState, setToggleState] = useState(false)
   const userId = sessionStorage.getItem("userId") // User's first name retrieved from SessionStorage. It is placed there at registration or login
 
   // This function to determines whether or not current user is already a player in a given event
@@ -40,22 +41,15 @@ function Search() {
   function joinHandler(eventId){
     axiosPrivate.patch(`/api/events/join/${eventId}/player/${userId}`,{} ,{withCredentials : true})
     .then(res => {
-      // I feel like there has to be a more elegant way to do the following
-      // But I'm running out of energy 
-      let tempEventsList = [...eventsList]
-      for ( let i=0; i < tempEventsList.length; i++){
-        if (tempEventsList[i]._id === eventId){
-          tempEventsList[i].players.push(auth.user)
-        }
-      }
-      setEventsList(tempEventsList)
       let tempFilterEvents = [...filteredEvents]
+      let tempEventsList = [...eventsList]
       for ( let i=0; i < tempFilterEvents.length; i++){
         if (tempFilterEvents[i]._id === eventId){
-          tempFilterEvents[i].players.push(auth.user)
+          tempFilterEvents[i].players.push(auth.user) // TODO: I don't understand why, but this seems to push to tempEventsList.players also... must be pointing to the same thing in memory??
         }
       }
       setFilteredEvents(tempFilterEvents)
+      setEventsList(tempEventsList)
     })
     .catch(err=> console.error(err))
   }

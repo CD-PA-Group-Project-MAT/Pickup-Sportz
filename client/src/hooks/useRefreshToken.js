@@ -8,12 +8,10 @@ const useRefreshToken = () => {
     const response = await axios.get("/api/refresh", {withCredentials: true})
     console.log("Access token expired, refreshing...")
     setAuth(prev => { 
-      return { ...prev, accessToken: response.data.accessToken}
+      return { ...prev, user: response.data.user}
     })
     return response.data.accessToken;
   }
-
   return refresh;
 }
-
 export default useRefreshToken;

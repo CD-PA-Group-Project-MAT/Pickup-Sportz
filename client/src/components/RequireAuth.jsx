@@ -9,7 +9,7 @@ It does this by checking if there is any user stored in 'auth' (AuthContext)
 via the getter in useAuth hook. If there is a user, the requested component is passed
 through in place of <Outlet/>.
 
-If there is NO user, the user is redirected to /login. The requested path
+If there is NO user, then the user is redirected to /login. The requested path
 before redirection is saved in state with useLocation hook.
 */
 
