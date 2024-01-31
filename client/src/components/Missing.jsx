@@ -2,7 +2,7 @@ import React from 'react'
 
 function Missing() {
   return (
-    <div>Missing</div>
+    <div>404 Error - page not found</div>
   )
 }
 

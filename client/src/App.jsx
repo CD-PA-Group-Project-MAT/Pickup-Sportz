@@ -9,6 +9,7 @@ import Search from "./components/Search.jsx";
 import Layout from "./components/Layout.jsx";
 import RequireAuth from "./components/RequireAuth.jsx";
 import Missing from "./components/Missing.jsx";
+import PersistLogin from "./components/PersistLogin.jsx";
 
 /*
   All routes are wrapped in 'Layout' component.
@@ -28,19 +29,22 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
+
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
 
-        <Route element={<RequireAuth/>}> {/* These are the protected routes */}
-          <Route path="/" element={<Dashboard />} />
-          <Route path="newEvent" element={<CreateEvent />} />
-          <Route path="newlocation" element={<CreateLocation />} />
-          <Route path="search" element={<Search />} />
-          <Route path="events/:id" element={<ViewEvent />} />
+        <Route element={<PersistLogin/>}> {/* These are the persisted routes */}
+          <Route element={<RequireAuth/>}> {/* These are the protected routes */}
+            <Route path="/" element={<Dashboard />} />
+            <Route path="newEvent" element={<CreateEvent />} />
+            <Route path="newlocation" element={<CreateLocation />} />
+            <Route path="search" element={<Search />} />
+            <Route path="events/:id" element={<ViewEvent />} />
+          </Route>
         </Route>
 
-        {/* TODO: for some reason Context is cleared here */}
         <Route path="*" element={<Missing/>}/>
+
       </Route>
     </Routes>
   );

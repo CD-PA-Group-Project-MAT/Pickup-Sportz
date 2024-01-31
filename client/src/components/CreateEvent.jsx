@@ -65,7 +65,6 @@ const CreateEvent = () => {
     e.preventDefault();
     axiosPrivate.post("/api/events", event, {withCredentials:true})
     .then(res => {
-      // console.log(res)
       navigate('/search')
     })
     .catch(err => {

@@ -3,9 +3,6 @@ import Navbar from "./Navbar";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { Link, useNavigate } from "react-router-dom";
 
-// TODO: add a cancel button - added
-// TODO: color for error messages -- added
-
 const CreateLocation = () => {
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
@@ -29,7 +26,6 @@ const CreateLocation = () => {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data);
         navigate("/newEvent");
       })
       .catch((err) => {
@@ -71,7 +67,6 @@ const CreateLocation = () => {
                 <label className="block mb-2 text-sm font-medium text-white">
                   Address
                 </label>
-                {/* insert value and handler */}
                 <input
                   type="text"
                   name="address"
@@ -86,7 +81,6 @@ const CreateLocation = () => {
                 <label className="block mb-2 text-sm font-medium text-white">
                   City
                 </label>
-                {/* insert value and handler */}
                 <input
                   type="text"
                   name="city"
@@ -101,7 +95,6 @@ const CreateLocation = () => {
                 <label className="block mb-2 text-sm font-medium text-white">
                   State
                 </label>
-                {/* insert value and handler */}
                 <input
                   type="text"
                   name="state"
@@ -116,7 +109,6 @@ const CreateLocation = () => {
                 <label className="block mb-2 text-sm font-medium text-white">
                   Location Details
                 </label>
-                {/* insert value and handler */}
                 <textarea
                   rows="4"
                   name="locationDetails"

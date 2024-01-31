@@ -12,13 +12,10 @@ const ViewEvent = () => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-
     // Get event from DB and setEvent in state
     axiosPrivate
       .get(`/api/events/${id}`, { withCredentials: true })
       .then((res) => {
-        // console.log("event");
-        // console.log(res.data);
         setEvent({ ...res.data });
       })
       .catch((err) => console.error(err));
@@ -29,8 +26,6 @@ const ViewEvent = () => {
         withCredentials: true,
       })
       .then((res) => {
-        // console.log("messages");
-        // console.log(res.data);
         setMessages(res.data);
       })
       .catch((err) => console.error(err));
@@ -51,7 +46,10 @@ const ViewEvent = () => {
           {/* title */}
           <div>
             <h2>{event.eventTitle}</h2>
-            <h2>{event.eventDate}</h2>
+            <h2>
+              {new Date(event.eventDate).toLocaleDateString() + " "}
+              {new Date(event.eventDate).toLocaleTimeString([],{ timeStyle: 'short'})}
+            </h2>
             <h2>{event.location?.locationName}{" "}</h2>
             <hr className="w-48 h-1 mx-auto my-4 bg-gray-400 border-0 rounded md:my-10"/>
           </div>

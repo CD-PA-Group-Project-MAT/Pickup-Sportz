@@ -6,7 +6,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AuthProvider from "./context/AuthProvider";
 /*
 I'm interested in testing the way BrowserRouter is interacting with the path="/*" here and why (if?) we need that extra <Route/>
-instead of just <App/> (this bit came from Dave Gray video) 
+instead of just <App/> (this bit came from Dave Gray video) Might have something to do with
+React Router v6 ...would like to look into this...
 */
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

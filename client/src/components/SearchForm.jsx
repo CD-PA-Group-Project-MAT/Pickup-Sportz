@@ -41,7 +41,7 @@ function SearchForm(props) {
         break;
       case "notFull":
         setFilteredEvents(
-          eventsList.filter((event) => event.maxPlayers > event.players.length)
+          eventsList.filter((event) => event.maxPlayers > event.players.length && new Date(event.eventDate) > new Date())
         );
         break;
       case "creatorName":

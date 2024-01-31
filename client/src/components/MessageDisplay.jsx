@@ -1,7 +1,7 @@
 
 
 function MessageDisplay(props) {
-  const { messages, setMessages } = props;
+  const { messages } = props;
 
   return (
     <div>
