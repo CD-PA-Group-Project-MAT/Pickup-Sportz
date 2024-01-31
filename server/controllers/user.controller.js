@@ -8,22 +8,34 @@ const jwt = require("jsonwebtoken");
 const REFRESH_TOKEN_SECRET = "secret_key" // For development
 const ACCESS_TOKEN_SECRET = "secret_key" // For development
 
+function generateAccessToken(user) {
+  const accessToken = jwt.sign({ _id : user._id, email : user.email }, ACCESS_TOKEN_SECRET, { expiresIn: '5m' });  // User token expires in 5 minutes
+  return accessToken;
+}
+function generateRefreshToken(user) {
+  const refreshToken = jwt.sign({ _id : user._id, email : user.email }, REFRESH_TOKEN_SECRET, {expiresIn: '7d'});  // Refresh token expires in 7 days
+  return refreshToken;
+}
 
 module.exports = {
-
-  getCurrentUser: async (req, res) => {
-    try{
-      const currentUser = await User
-        .find({_id : req.body.userId})                         // req.body.userId will come through JWT token
-        .populate({path: 'events', populate: { path: 'location', model: "Location"}}); 
-      res.status(200).json(currentUser);
-    } 
-    catch (err){
-      res.status(400).json(err);
+  refreshToken : async (req,res) => {
+    // console.log("getting to refreshToken")
+    try {
+      const currentUser = {_id : req.body.userId, email: ""}; // TODO MAYBE get rid of email in token payload ?????
+      // const currentUser = await User.findOne({_id : req.body.userId});
+      // console.log("currentUser ");
+      // console.log(currentUser);
+      const accessToken = await generateAccessToken(currentUser);
+      console.log("Refreshing Access Token")
+      res
+        .status(201)
+        .cookie("accessToken", accessToken, { httpOnly: true, maxAge : 1*60*60*1000}) // Cookie maxAge = 1 hour from now
+        .json({msg: "Refreshed accessToken!", user : currentUser, accessToken : accessToken })
+    } catch(err) {
+      res.status(400).json(err)
     }
   },
 
-  // TODO reduce cookie maxAge and token expiresIn
   register : async (req,res) => {
     try {
       const possibleUser = await User.findOne({ email : req.body.email })
@@ -32,11 +44,13 @@ module.exports = {
       } else {
         const newUser = await User.create(req.body)
         // *The first value passed into jwt.sign is the 'payload'. This can be retrieved in jwt.verify
-        const userToken = jwt.sign({ _id : newUser._id, email : newUser.email }, ACCESS_TOKEN_SECRET, { expiresIn: '12h' });  // Token expires in 12 hours
+        const accessToken = generateAccessToken(newUser);
+        const refreshToken = generateRefreshToken(newUser);  
         res
           .status(201)
-          .cookie("userToken", userToken, { httpOnly: true, maxAge : 12*60*60*1000}) // Cookie maxAge = 12 hours from now
-          .json({msg: "success!", user : newUser})
+          .cookie("accessToken", accessToken, { httpOnly: true, maxAge : 1*60*60*1000}) 
+          .cookie("refreshToken", refreshToken, { httpOnly: true, maxAge : 12*60*60*1000}) 
+          .json({msg: "success!", user : newUser, accessToken : accessToken})
       }
     }
     catch(err) {
@@ -57,11 +71,14 @@ module.exports = {
           // console.log("password is correct")
           // *The first value passed into jwt.sign is the 'payload'. This can be retrieved in jwt.verify
           // TODO extended the expiration times for development...
-          const userToken = jwt.sign({_id: user._id, email:user.email}, ACCESS_TOKEN_SECRET, {expiresIn:'12h'});  // PW is a match! Define userToken
+          // const accessToken = jwt.sign({_id: user._id, email:user.email}, ACCESS_TOKEN_SECRET, {expiresIn:'12h'});  // PW is a match! Define accessToken
+          const accessToken = generateAccessToken(user);
+          const refreshToken = generateRefreshToken(user);  
           res
             .status(201)
-            .cookie('userToken', userToken, {httpOnly:true, maxAge: 12*60*60*1000})
-            .json({msg: "success!", user : user})
+            .cookie('accessToken', accessToken, {httpOnly:true, maxAge: 1*60*60*1000})
+            .cookie("refreshToken", refreshToken, { httpOnly: true, maxAge : 12*60*60*1000})
+            .json({msg: "success!", user : user, accessToken : accessToken})
         } else {                                                      // Password was NOT a match
           res.status(400).json({message:"Invalid Credentials"});
         }
@@ -73,8 +90,20 @@ module.exports = {
   },
     
   logout: (req, res) => {
-    res.clearCookie('userToken');
+    res.clearCookie('accessToken');
     res.sendStatus(200);                                              // Apparently, this is the equivalent of res.status(200).send('OK')
+  },
+  
+  getCurrentUser: async (req, res) => {
+    try{
+      const currentUser = await User
+        .find({_id : req.body.userId})                         // req.body.userId will come through JWT token
+        .populate({path: 'events', populate: { path: 'location', model: "Location"}}); 
+      res.status(200).json(currentUser);
+    } 
+    catch (err){
+      res.status(400).json(err);
+    }
   },
 
   // TODO: this is untested(new) code. Test it out. 
@@ -87,16 +116,6 @@ module.exports = {
     } 
     catch (err){
       res.status(400).json(err);
-    }
-  },
-
-  // TODO: remove this 'createUser' once testing is complete and authentication is live.  
-  createUser: async (req,res) => {
-    try {
-      const mewUser = await User.create (req.body)
-      res.status(200).json(mewUser)
-    } catch(err) {
-      res.status(400).json(err)
     }
   }
 }

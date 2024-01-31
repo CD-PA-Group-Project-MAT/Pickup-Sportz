@@ -1,11 +1,13 @@
-import axios from 'axios';
+
 import { useState } from 'react';
 import useAuth from '../hooks/useAuth';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 
 function MessageForm(props) {
   const {id, messages, setMessages} = props;
   const { auth } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
   const [errors, setErrors] = useState([]);
   const [ message, setMessage ] = useState({
     messageContent : "",
@@ -15,10 +17,10 @@ function MessageForm(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("add new message")
-    axios.post("http://localhost:8000/api/messages", message, {withCredentials:true})
+    // console.log("add new message")
+    axiosPrivate.post("/api/messages", message, {withCredentials:true})
     .then(res => {
-      let tempMessage = res.data;
+      let tempMessage = res.data; // TODO double-check but I think I can remove the next 2 lines
       tempMessage.author = auth.user
       setMessages([...messages, {...res.data, author : auth.user}])
       setMessage({...message, messageContent : ""})

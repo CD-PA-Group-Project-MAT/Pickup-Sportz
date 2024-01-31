@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
-import axios from "axios";
 import { Link } from "react-router-dom";
-
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const Dashboard = () => {
   const [ user, setUser ] = useState({}); // 'user' state holds the current user object
-
+  const axiosPrivate = useAxiosPrivate();
   const userFirstName = sessionStorage.getItem("userName") // User's first name retrieved from SessionStorage. It is placed there at registration or login
   const userId = sessionStorage.getItem("userId") // User's first name retrieved from SessionStorage. It is placed there at registration or login
 
@@ -25,8 +24,8 @@ const Dashboard = () => {
   time we render this component
    */
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/users", {withCredentials: true})
+    axiosPrivate
+      .get("/api/users", {withCredentials: true})
       .then(res => {
         setUser(res.data[0])}
       )
@@ -49,33 +48,33 @@ const Dashboard = () => {
         <table className="w-1/2 text-sm text-left rtl:text-right  text-gray-400 ">
           <thead className="text-xs uppercase bg-gray-700 text-gray-400">
             <tr>
-              <th scope="col" class="px-6 py-3">Event Name</th>
-              <th scope="col" class="px-6 py-3">Location</th>
-              <th scope="col" class="px-6 py-3">Attendees</th>
-              <th scope="col" class="px-6 py-3">Time</th>
+              <th scope="col" className="px-6 py-3">Event Name</th>
+              <th scope="col" className="px-6 py-3">Location</th>
+              <th scope="col" className="px-6 py-3">Attendees</th>
+              <th scope="col" className="px-6 py-3">Time</th>
             </tr>
           </thead>
           <tbody>
             { user.events && user.events.filter((event) => new Date(event.eventDate).toDateString() == new Date().toDateString() ).length > 0 
             ? 
             user.events.filter((event) => new Date(event.eventDate).toDateString() == new Date().toDateString() ).sort((a,b) => new Date(a.eventDate) > new Date(b.eventDate) ? 1 : -1 ).map(event => 
-              <tr class="border-b bg-gray-800 border-gray-700 hover:bg-gray-600" key={event._id}>
-                <td class="px-6 py-4">
+              <tr className="border-b bg-gray-800 border-gray-700 hover:bg-gray-600" key={event._id}>
+                <td className="px-6 py-4">
                   <Link to={`/events/${event._id}`}>{event.eventTitle}</Link>
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                   {event.location.locationName}
                 </td>
-                <td class="px-6 py-4"> 
+                <td className="px-6 py-4"> 
                   {event.players.length} / {event.maxPlayers}
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                   {new Date(event.eventDate).toLocaleTimeString([],{ timeStyle: 'short'})}
                 </td>
               </tr>)
               :
               <tr>
-                <td colspan="4" className="text-center py-4"> 
+                <td colSpan="4" className="text-center py-4"> 
                   Nothing on the schedule for today. Check <Link to={"/search"} className=" md:hover:text-blue-500 text-white hover:bg-gray-700 hover:text-white">events</Link> for the full schedule!
                 </td>
               </tr>
@@ -96,27 +95,27 @@ const Dashboard = () => {
         <table className="w-1/2 text-sm text-left rtl:text-right  text-gray-400">
           <thead className="text-xs  uppercase bg-gray-700 text-gray-400">
             <tr>
-              <th scope="col" class="px-6 py-3">Event Name</th>
-              <th scope="col" class="px-6 py-3">Location</th>
-              <th scope="col" class="px-6 py-3">Attendees</th>
-              <th scope="col" class="px-6 py-3">Time</th>
+              <th scope="col" className="px-6 py-3">Event Name</th>
+              <th scope="col" className="px-6 py-3">Location</th>
+              <th scope="col" className="px-6 py-3">Attendees</th>
+              <th scope="col" className="px-6 py-3">Time</th>
             </tr>
           </thead>
           <tbody>
           { user.events && user.events.filter((event) => afterToday(event.eventDate)).length > 0 
             ? 
             user.events.filter((event) => afterToday(event.eventDate)).sort((a,b) => new Date(a.eventDate) > new Date(b.eventDate) ? 1 : -1 ).map(event => 
-              <tr class=" border-b bg-gray-800 border-gray-700 hover:bg-gray-600" key={event._id}>
-                <td class="px-6 py-4">
+              <tr className=" border-b bg-gray-800 border-gray-700 hover:bg-gray-600" key={event._id}>
+                <td className="px-6 py-4">
                   <Link to={`/events/${event._id}`}>{event.eventTitle}</Link>
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                   {event.location.locationName}
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                   {event.players.length} / {event.maxPlayers}
                 </td>
-                <td class="px-6 py-4">
+                <td className="px-6 py-4">
                   {new Date(event.eventDate).toLocaleDateString() + " - "}
                   {new Date(event.eventDate).toLocaleTimeString([], {timeStyle: 'short'})}
                 </td>
@@ -124,7 +123,7 @@ const Dashboard = () => {
             )
             :
             <tr>
-              <td colspan="4" className="text-center py-4"> 
+              <td colSpan="4" className="text-center py-4"> 
                 No future events. Check <Link to={"/search"} className=" md:hover:text-blue-500 text-white hover:bg-gray-700 hover:text-white">events</Link> for the full schedule!
               </td>
             </tr>

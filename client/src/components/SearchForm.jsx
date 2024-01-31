@@ -1,8 +1,6 @@
 import { useState } from "react";
 import toISODateString from "../utils/toISOdateString";
 
-// TODO: disable searchterm box when searchby == notFull
-
 function SearchForm(props) {
   const { eventsList, setFilteredEvents } = props;
   const [searchBy, setSearchBy] = useState("eventTitle");

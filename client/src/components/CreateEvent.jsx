@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import toISODateString from "../utils/toISOdateString";
-
-// Maybe add a cancel button?
-// TODO: color for validation error messages
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const CreateEvent = () => {
   const userId = sessionStorage.getItem("userId"); // User's first name retrieved from SessionStorage. It is placed there at registration or login
   const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
 
   const [errors, setErrors] = useState({});
   const [locations, setLocations] = useState([]);
@@ -36,8 +34,8 @@ const CreateEvent = () => {
 
   // pulling locations from database
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/locations", {withCredentials:true})
+    axiosPrivate
+      .get("/api/locations", {withCredentials:true})
       .then((res) => {
         if(res.data.length > 0){                                        // In case there are no locations in DB
           setEvent({...event, location : res.data[0]._id})              // The idea is that the location is prefilled with the first _id in the location collection
@@ -65,7 +63,7 @@ const CreateEvent = () => {
   /* Handle form submission here */
   function handleSubmit(e){
     e.preventDefault();
-    axios.post("http://localhost:8000/api/events", event, {withCredentials:true})
+    axiosPrivate.post("/api/events", event, {withCredentials:true})
     .then(res => {
       // console.log(res)
       navigate('/search')

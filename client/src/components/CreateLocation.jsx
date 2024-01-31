@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 // TODO: add a cancel button
 // TODO: color for error messages
 
 const CreateLocation = () => {
   const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
   const [errors, setErrors] = useState({});
   const [location, setLocation] = useState({
     locationName: "",
@@ -23,8 +24,8 @@ const CreateLocation = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:8000/api/locations", location, {
+    axiosPrivate
+      .post("/api/locations", location, {
         withCredentials: true,
       })
       .then((res) => {

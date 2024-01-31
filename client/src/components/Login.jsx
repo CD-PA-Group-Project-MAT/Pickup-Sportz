@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../api/axios';
 import useAuth from '../hooks/useAuth';
 
 const Login = () => {
@@ -15,7 +15,7 @@ const Login = () => {
   const loginHandler = (e) =>  {
       e.preventDefault();
       // TODO: eventually - maybe first thing upon attempt to login would be to 'logout' if there is a cookie and sessionStorage
-      axios.post("http://localhost:8000/api/login", { email, password}, { withCredentials : true }) 
+      axios.post("/api/login", { email, password}, { withCredentials : true }) 
       .then((res) => {
         setAuth( {user: res.data.user})
         sessionStorage.setItem('userName', res.data.user.firstName)
