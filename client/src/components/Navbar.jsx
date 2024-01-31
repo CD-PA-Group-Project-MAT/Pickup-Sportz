@@ -1,12 +1,15 @@
-import axios from "axios";
+
 import { Link, useNavigate } from "react-router-dom";
+// import useRefreshToken from "../hooks/useRefreshToken";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const Navbar = () => {
+  // const refresh = useRefreshToken();
   const navigate = useNavigate();
-
+  const axiosPrivate = useAxiosPrivate();
   const logoutUser = () => {
-    axios
-      .post("http://localhost:8000/api/logout", {}, { withCredentials: true }) // This will "clearCookie" userToken on back end
+    axiosPrivate
+      .post("/api/logout", {}, { withCredentials: true }) // This will "clearCookie" access token and refresh token on back end
       .then((res) => {      
         sessionStorage.removeItem("userName");                                  // This clears sessionStorage
         sessionStorage.removeItem("userId");                                  // This clears sessionStorage
@@ -50,11 +53,11 @@ const Navbar = () => {
             </li>
 
             {/* <li>
-              <Link to="/"
+              <button onClick={()=>{(refresh())}}
                 className="block py-2 px-3 rounded  md:hover:bg-transparent md:p-0 text-white md:hover:text-blue-500 hover:bg-gray-700 hover:text-white border-gray-700"
               >
-                My Events
-              </Link>
+                Refresh
+              </button>
             </li> */}
             <li>
               <span

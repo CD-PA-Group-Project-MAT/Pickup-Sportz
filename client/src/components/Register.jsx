@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios'
 import toISODateString from "../utils/toISOdateString";
 import useAuth from "../hooks/useAuth";
+import axios from "../api/axios";
 
 // set colors for error messages and fixed routing issue causing back to sign in to route to dashboard
 
@@ -28,7 +28,7 @@ const Register = () => {
   const handleRegister = (e) => {
     e.preventDefault();
       // TODO: eventually - maybe first thing upon attempt to register would be to 'logout' if there is a cookie and sessionStorage
-      axios.post("http://localhost:8000/api/register", user, {withCredentials:true})
+      axios.post("/api/register", user, {withCredentials:true})
       .then((res) => {
         setAuth( {user: res.data.user})
         sessionStorage.setItem('userName', res.data.user.firstName)

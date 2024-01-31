@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react"
 import Navbar from "./Navbar"
-import axios from 'axios'
 import SearchForm from "./SearchForm"
-import { Link } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import useAuth from "../hooks/useAuth"
+import useAxiosPrivate from "../hooks/useAxiosPrivate"
 
 function Search() {
   const { auth } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
   const [eventsList,setEventsList] = useState([])
+  const navigate = useNavigate();
+  const location = useLocation();
   const [filteredEvents, setFilteredEvents] = useState([])
   const userId = sessionStorage.getItem("userId") // User's first name retrieved from SessionStorage. It is placed there at registration or login
 
@@ -21,18 +24,21 @@ function Search() {
 
     // This block populates an array of the entire database of List and sets 'events' state
   useEffect(() => {
-    axios.get("http://localhost:8000/api/events", {withCredentials: true})
+    axiosPrivate.get("/api/events", {withCredentials: true})
     .then(res => {
       setEventsList(res.data);
       const sortedEvents = res.data.sort((a,b) => new Date(a.eventDate) > new Date(b.eventDate) ? 1 : -1 )
       setFilteredEvents(sortedEvents);
     })
-    .catch(err => console.error(err))
+    .catch(err => {
+      console.error(err)
+      navigate('/login', { state: {from: location}, replace: true }) // TODO: Add this line to all axiosPrivate requests (along with imports and definitions above)
+    })
   },[])
 
   /* Here's where we handle a click on a 'join' link */
   function joinHandler(eventId){
-    axios.patch(`http://localhost:8000/api/events/join/${eventId}/player/${userId}`,{} ,{withCredentials : true})
+    axiosPrivate.patch(`/api/events/join/${eventId}/player/${userId}`,{} ,{withCredentials : true})
     .then(res => {
       // I feel like there has to be a more elegant way to do the following
       // But I'm running out of energy 
@@ -56,7 +62,7 @@ function Search() {
 
   /* Here's where we handle a click on a 'drop' link */
   function handleDrop(eventId){
-    axios.patch(`http://localhost:8000/api/events/drop/${eventId}/player/${userId}`,{} ,{withCredentials : true})
+    axiosPrivate.patch(`/api/events/drop/${eventId}/player/${userId}`,{} ,{withCredentials : true})
     .then(res => {
       // I feel like there has to be a more elegant way to do the following
       // But I'm running out of energy 

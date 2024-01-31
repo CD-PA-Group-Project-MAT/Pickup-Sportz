@@ -1,28 +1,31 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "./Navbar";
-import axios from "axios";
 import MessageDisplay from "./MessageDisplay";
 import MessageForm from "./MessageForm";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const ViewEvent = () => {
   const { id } = useParams();
+  const axiosPrivate = useAxiosPrivate();
   const [event, setEvent] = useState({});
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    // Get event from DB and setTask in state
-    axios
-      .get(`http://localhost:8000/api/events/${id}`, { withCredentials: true })
+
+    // Get event from DB and setEvent in state
+    axiosPrivate
+      .get(`/api/events/${id}`, { withCredentials: true })
       .then((res) => {
         // console.log("event");
         // console.log(res.data);
         setEvent({ ...res.data });
       })
       .catch((err) => console.error(err));
+
     // get messages for this event and set in state
-    axios
-      .get(`http://localhost:8000/api/messages/${id}`, {
+    axiosPrivate
+      .get(`/api/messages/${id}`, {
         withCredentials: true,
       })
       .then((res) => {
