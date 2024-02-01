@@ -4,8 +4,6 @@ import toISODateString from "../utils/toISOdateString";
 import useAuth from "../hooks/useAuth";
 import axios from "../api/axios";
 
-// set colors for error messages and fixed routing issue causing back to sign in to route to dashboard
-
 const Register = () => {
   const {setAuth} = useAuth();
   const navigate = useNavigate();

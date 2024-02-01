@@ -20,6 +20,8 @@ const ViewEvent = () => {
     // Then to OpenWeather's geocoding API, where you give a city, state and country code and it returns longitude and latitude
     // Then finally to OpenWeather's "One Call API 3.0" which gives 8 days forecast.
     // OpenWeather gives 1000 calls for free every day.
+
+    // For some reason, the following block is executed twice upon component load, I'm thinking maybe it is because state is changed when when we load messages below. I'll look into this more later...
     axiosPrivate
       .get(`/api/events/${id}`, { withCredentials: true })
       .then((resEvent) => {
