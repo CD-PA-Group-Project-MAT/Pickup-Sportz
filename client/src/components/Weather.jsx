@@ -5,16 +5,27 @@ function Weather(props) {
     <div className="flex flex-row flex-wrap justify-evenly mt-5 mb-10">
       <div className=" text-white border border-gray-700 bg-gray-700 rounded-lg w-80 p-5">
         <p>{event?.location?.city} Forecast:</p>
-        {weatherData.length > 0
-          ? 
-          weatherData.map((day, idx) => (
-              <div key={idx}>
-                {new Date(day.dt * 1000).toLocaleDateString([], { weekday:"short", month: "short", day: "numeric"}) + " "}
-                {day.weather[0].main + " "}
-                {Math.round(day.temp.day)}&#176;F / {Math.round(day.temp.night)}&#176;F
-              </div>
-            ))
-          : <p>"Weather Forecast Not Available"</p>}
+        <table>
+          <tbody>
+            {weatherData.length > 0 ? (
+              weatherData.map((day, idx) => (
+                <tr key={idx}>
+                  <td className="px-2">
+                    {new Date(day.dt * 1000).toLocaleDateString([], {weekday: "short",month: "short",day: "numeric",})}
+                  </td>
+                  <td className="px-2">
+                    {day.weather[0].main + " "}
+                  </td>
+                  <td className="px-2">
+                    {Math.round(day.temp.day)}&#176;{"F / "}{Math.round(day.temp.night)}&#176;F
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr><td>"Weather Forecast Not Available"</td></tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );

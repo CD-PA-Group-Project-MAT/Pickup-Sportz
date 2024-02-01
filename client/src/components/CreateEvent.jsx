@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import toISODateString from "../utils/toISOdateString";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth";
 
 const CreateEvent = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [errors, setErrors] = useState({});
@@ -43,7 +44,10 @@ const CreateEvent = () => {
         }
         setLocations(res.data);
       })
-      .catch((err) => console.log(err));
+      .catch(err => {
+        console.error(err)
+        navigate('/login', { state: {from: location}, replace: true }) // TODO: Add this line to all axiosPrivate requests (along with imports and definitions above)
+      })
   }, []);
 
   /* Handle change in all form fields here */

@@ -13,7 +13,7 @@ const Navbar = () => {
     axiosPrivate
       .post("/api/logout", {}, { withCredentials: true }) // This will "clearCookie" access token and refresh token on back end
       .then((res) => {      
-        // setAuth({}) // TEMP <--- I don't think this is necessary
+        setAuth({}) // TEMP <--- I'm not sure if this is necessary
         navigate("/login");
       })
       .catch((err) => console.error("error logging out" + err));

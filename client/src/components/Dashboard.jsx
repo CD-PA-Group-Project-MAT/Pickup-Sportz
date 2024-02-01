@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth"; 
 
@@ -8,8 +8,10 @@ const Dashboard = () => {
   const [ user, setUser ] = useState({}); // 'user' state holds the current user object
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
+  const location = useLocation();
   const userFirstName = auth.user.firstName 
-  const userId = auth.user._id  
+  const userId = auth.user._id;  
 
   /* This function will accept a date in ISO date format (eg:"2024-01-31T18:00:00.000Z" )
     It will return true if the that date is after midnight tonight, otherwise it will return false  */
@@ -22,7 +24,7 @@ const Dashboard = () => {
   
   /* 
   This next useEffect block returns the current user's info from the server so that we have all it available to use.
-  Pulling from 'useAuth' night not work (or would be more complicated) because the array of events needs to be updated every 
+  Pulling from 'useAuth' night not work (or would be more complicated) because the imbedded array of events needs to be updated every 
   time we render this component
    */
   useEffect(() => {
@@ -31,7 +33,10 @@ const Dashboard = () => {
       .then(res => {
         setUser(res.data[0])}
       )
-      .catch((err) => console.error(err));
+      .catch(err => {
+        console.error(err)
+        navigate('/login', { state: {from: location}, replace: true }) // TODO: Add this line to all axiosPrivate requests (along with imports and definitions above)
+      })
   }, []);
 
   return (
