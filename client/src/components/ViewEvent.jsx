@@ -61,9 +61,9 @@ const ViewEvent = () => {
         <Navbar />
       </div>
       {/* everything wrapper - gonna flex info and messages so they are side by side */}
-      <div className="flex flex-row flex-wrap justify-evenly mt-5 mb-10">
+      <div className="flex flex-row flex-wrap justify-center mt-9 mb-10">
         {/* wrapper for card */}
-        <div className=" text-white border border-gray-700 bg-gray-700 rounded-lg w-80 p-5">
+        <div className=" text-white border border-gray-700 bg-gray-700 rounded-lg w-80 p-5 mr-52">
           {/* title */}
           <div>
             <h2>{event.eventTitle}</h2>
@@ -81,8 +81,11 @@ const ViewEvent = () => {
             <p>{event.eventDetails}</p>
           </div>
         </div>
+        <div className="ml-5">
+          <Weather weatherData={weatherData} event={event}/>
+
+        </div>
       </div>
-      <Weather weatherData={weatherData} event={event}/>
       <div className="flex justify-center">
         <div className=" text-white border w-1/2 h-96 border-gray-700 rounded-lg p-5 flex flex-col bg-gray-700">
           <div className="overflow-auto h-72">
