@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useAuth from "../hooks/useAuth"; 
 
 const Dashboard = () => {
   const [ user, setUser ] = useState({}); // 'user' state holds the current user object
+  const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
-  const userFirstName = sessionStorage.getItem("userName") // User's first name retrieved from SessionStorage. It is placed there at registration or login
-  const userId = sessionStorage.getItem("userId") // User's first name retrieved from SessionStorage. It is placed there at registration or login
+  const userFirstName = auth.user.firstName 
+  const userId = auth.user._id  
 
   /* This function will accept a date in ISO date format (eg:"2024-01-31T18:00:00.000Z" )
     It will return true if the that date is after midnight tonight, otherwise it will return false  */
@@ -31,8 +33,6 @@ const Dashboard = () => {
       )
       .catch((err) => console.error(err));
   }, []);
-
-  // todo: need to move tables down a bit, should be easy enough. Also see if you can round off tables to make them look consistent with rest of UI (Tony you can ignore this comment its just so I remember)
 
   return (
     <div>

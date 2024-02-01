@@ -3,18 +3,19 @@ import Navbar from "./Navbar";
 import { Link, useNavigate } from "react-router-dom";
 import toISODateString from "../utils/toISOdateString";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useAuth from "../hooks/useAuth";
 
 const CreateEvent = () => {
-  const userId = sessionStorage.getItem("userId"); // User's first name retrieved from SessionStorage. It is placed there at registration or login
   const navigate = useNavigate();
+  const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
-
   const [errors, setErrors] = useState({});
   const [locations, setLocations] = useState([]);
   const [datePicker, setDatePicker] = useState(toISODateString(new Date()));  // Set default date to today. HTML date form is formatted as "YYYY-MM-DD"
   const [timePicker, setTimePicker] = useState("12:00");                      // Set default time to noon. HTML time form is formatted "18:00" for 6:00pm
-
-  /* This is a little helper function that takes the date string and time string and combines
+    const userId = auth.user._id;
+  
+    /* This is a little helper function that takes the date string and time string and combines
       them into a JS date object. Notice that month is 0 indexed so we subtract 1 for the month.
    */ 
   function dateObjectMaker(ISOdateString, timeString) {

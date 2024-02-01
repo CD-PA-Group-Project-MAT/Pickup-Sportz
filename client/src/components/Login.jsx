@@ -17,8 +17,6 @@ const Login = () => {
       axios.post("/api/login", { email, password}, { withCredentials : true }) 
       .then((res) => {
         setAuth( {user: res.data.user})
-        sessionStorage.setItem('userName', res.data.user.firstName)
-        sessionStorage.setItem('userId', res.data.user._id)
         navigate(from, { replace: true }); // The idea here is that are we go to the location requested but cut off by the RequireAuth.jsx page before user was redirected to Login
       } )
       .catch(err => {

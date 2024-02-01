@@ -12,8 +12,7 @@ function Search() {
   const location = useLocation();
   const [eventsList,setEventsList] = useState([])
   const [filteredEvents, setFilteredEvents] = useState([])
-  const [toggleState, setToggleState] = useState(false)
-  const userId = sessionStorage.getItem("userId") // User's first name retrieved from SessionStorage. It is placed there at registration or login
+  const userId = auth.user._id // sessionStorage.getItem("userId") // User's first name retrieved from SessionStorage. It is placed there at registration or login
 
   // This function to determines whether or not current user is already a player in a given event
   function userIsPlayer(event){
