@@ -14,11 +14,11 @@ const ACCESS_COOKIE_MAXAGE = 1*60*60*1000
 const REFRESH_COOKIE_MAXAGE = 30*12*60*60*1000
 
 function generateAccessToken(user) {
-  const accessToken = jwt.sign({ _id : user._id, email : user.email }, ACCESS_TOKEN_SECRET, { expiresIn: ACCESS_TOKEN_DURATION });
+  const accessToken = jwt.sign({ _id : user._id }, ACCESS_TOKEN_SECRET, { expiresIn: ACCESS_TOKEN_DURATION });
   return accessToken;
 }
 function generateRefreshToken(user) {
-  const refreshToken = jwt.sign({ _id : user._id, email : user.email }, REFRESH_TOKEN_SECRET, {expiresIn: REFRESH_TOKEN_DURATION}); 
+  const refreshToken = jwt.sign({ _id : user._id }, REFRESH_TOKEN_SECRET, {expiresIn: REFRESH_TOKEN_DURATION}); 
   return refreshToken;
 }
 

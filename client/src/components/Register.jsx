@@ -30,8 +30,6 @@ const Register = () => {
       axios.post("/api/register", user, {withCredentials:true})
       .then((res) => {
         setAuth( {user: res.data.user})
-        sessionStorage.setItem('userName', res.data.user.firstName)
-        sessionStorage.setItem('userId', res.data.user._id)
         navigate("/");
       })
       .catch(err => {

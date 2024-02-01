@@ -13,8 +13,6 @@ const Navbar = () => {
     axiosPrivate
       .post("/api/logout", {}, { withCredentials: true }) // This will "clearCookie" access token and refresh token on back end
       .then((res) => {      
-        sessionStorage.removeItem("userName");                                  // This clears sessionStorage
-        sessionStorage.removeItem("userId");                                  // This clears sessionStorage
         // setAuth({}) // TEMP <--- I don't think this is necessary
         navigate("/login");
       })
