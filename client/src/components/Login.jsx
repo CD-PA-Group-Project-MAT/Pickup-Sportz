@@ -4,23 +4,32 @@ import axios from '../api/axios';
 import useAuth from '../hooks/useAuth';
 
 const Login = () => {
-  const { setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/"; // So here we are defining where we will 'navigate to' after a successful login. If the user was redirected here from 'RequireAuth' there should be a path saved in state that we can use. Otherwise, we navigate to '/' (which is the dashboard)
+  // console.log("*~*~*~*~ FROM path in Login.jsx: " + from)  
   const [errorMessage, setErrorMessage] = useState("");
   const [email,setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const loginHandler = (e) =>  {
+  const handleLogin = (e) =>  {
       e.preventDefault();
-      axios.post("/api/login", { email, password}, { withCredentials : true }) 
+      axios.post("/api/login", { email, password}, { withCredentials : true })  // TODO is withCredentials needed here? I don't think we are using cookie on the back end ??
       .then((res) => {
-        setAuth( {user: res.data.user})
+        // console.log("Successful login. Here is axios response: ")
+        // console.log(res)
+        setAuth( {user: res.data.user, accessToken: res.data.accessToken}) 
         navigate(from, { replace: true }); // The idea here is that are we go to the location requested but cut off by the RequireAuth.jsx page before user was redirected to Login
       } )
       .catch(err => {
-        setErrorMessage(err.response.data.message)
+        if (!err?.response) {
+          setErrorMessage('No Server Response')
+        } else if ( err.response?.status === 401){
+          setErrorMessage('Unauthorized')
+        } else {
+          setErrorMessage(err.response.data.message)
+        }
       })
   }
 
@@ -32,7 +41,7 @@ const Login = () => {
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl">
                     Sign in to your Pickup Sportz account
                 </h1>
-                <form className="space-y-4 md:space-y-6" onSubmit={loginHandler}>
+                <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
                     <div>
                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-white ">Your email</label>
                         <input type="email" name="email" id="email" className=" border   sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" placeholder="name@email.com" required="" value={email} onChange={(e) => setEmail(e.target.value)}/>

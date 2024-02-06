@@ -15,9 +15,9 @@ const ACCESS_TOKEN_SECRET = "secret_key"; // For development
   to the server
   */
 module.exports.authenticate = (req, res, next) => {
-  jwt.verify(req.cookies.accessToken, ACCESS_TOKEN_SECRET, (err, payload) => {
+  jwt.verify(req?.headers['authorization'].split(" ")[1], ACCESS_TOKEN_SECRET, (err, payload) => {      // Access token is received in request 'headers' from axios on front end
     if (err) {
-      // console.log("Access token auth failed within jwt.config.js");
+      console.log("Access token auth failed within jwt.config.js");
       res.status(403).json({ verified: false });
     } else {
       // * This is where we retrieve the 'payload' from the token !!
@@ -30,7 +30,7 @@ module.exports.authenticate = (req, res, next) => {
 };
 
 /* This verifies the *refresh token* (when it is time update the access token)  */
-module.exports.authenticateRefresh = (req, res, next) => {
+module.exports.authenticateRefresh = (req, res, next) => {                                              // Refresh token is received in httpOnly cookie that comes with every axios request where { credentials: true }
   jwt.verify(req.cookies.refreshToken, REFRESH_TOKEN_SECRET, (err, payload) => {
     if (err) {
       console.log("Refresh token auth failed within jwt.config.js");

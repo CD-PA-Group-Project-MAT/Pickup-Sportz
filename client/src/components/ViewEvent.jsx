@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Navbar from "./Navbar";
 import MessageDisplay from "./MessageDisplay";
 import MessageForm from "./MessageForm";
@@ -10,6 +10,8 @@ import axios from 'axios'; // vanilla axios here for weather API
 const ViewEvent = () => {
   const { id } = useParams();
   const axiosPrivate = useAxiosPrivate();
+  const pathLocation = useLocation();
+  const navigate = useNavigate();
   const [event, setEvent] = useState({});
   const [messages, setMessages] = useState([]);
   const [weatherData, setWeatherData] = useState([]);
@@ -23,7 +25,7 @@ const ViewEvent = () => {
 
     // For some reason, the following block is executed twice upon component load, I'm thinking maybe it is because state is changed when when we load messages below. I'll look into this more later...
     axiosPrivate
-      .get(`/api/events/${id}`, { withCredentials: true })
+      .get(`/api/events/${id}`)//, { withCredentials: true })
       .then((resEvent) => {
         setEvent({ ...resEvent.data });
         // API CALLS IN HERE FOR LOCATION & WEATHER
@@ -45,13 +47,14 @@ const ViewEvent = () => {
 
     // get messages for this event and set in state
     axiosPrivate
-      .get(`/api/messages/${id}`, {
-        withCredentials: true,
-      })
+      .get(`/api/messages/${id}`)//, {withCredentials: true,})
       .then((res) => {
         setMessages(res.data);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        navigate('/login', { state: {from: pathLocation}, replace: true });
+      });
   }, []);
 
   return (

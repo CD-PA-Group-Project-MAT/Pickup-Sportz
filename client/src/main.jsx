@@ -14,7 +14,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route path="/*" element={<App />} />
+          <Route path="/*" element={<App />} />  {/* "we are not just going to have the App component here." - dave gray... maybe there's more I haven't gotten to yet... */}
         </Routes>
       </AuthProvider>
     </BrowserRouter>

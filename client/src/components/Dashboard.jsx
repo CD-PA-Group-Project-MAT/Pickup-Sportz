@@ -9,7 +9,7 @@ const Dashboard = () => {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
-  const location = useLocation();
+  const pathLocation = useLocation();
   const userFirstName = auth.user.firstName 
   const userId = auth.user._id;  
 
@@ -29,13 +29,13 @@ const Dashboard = () => {
    */
   useEffect(() => {
     axiosPrivate
-      .get("/api/users", {withCredentials: true})
+      .get("/api/users")//, {withCredentials: true})
       .then(res => {
         setUser(res.data[0])}
       )
       .catch(err => {
         console.error(err)
-        navigate('/login', { state: {from: location}, replace: true }) // TODO: Add this line to all axiosPrivate requests (along with imports and definitions above)
+        navigate('/login', { state: {from: pathLocation}, replace: true })
       })
   }, []);
 

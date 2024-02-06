@@ -1,8 +1,6 @@
 const EventController = require("../controllers/event.controller");
 const { authenticate } = require('../config/jwt.config');
 
-// TODO add back 'authenticate' middleware when JWT is working
-
 module.exports = app => {
     app.get("/api/events", authenticate, EventController.getAllEvents);
     app.get('/api/events/:id', authenticate, EventController.getEventById);

@@ -25,13 +25,21 @@ const Register = () => {
 
   const handleRegister = (e) => {
     e.preventDefault();
-      axios.post("/api/register", user, {withCredentials:true})
+      axios.post("/api/register", user, {withCredentials:true}) // TODO not sure if we need withCredentials here??
       .then((res) => {
-        setAuth( {user: res.data.user})
+        // console.log("Successful registration. Here is axios response: ")
+        // console.log(res)
+        setAuth( {user: res.data.user, accessToken: res.data.accessToken}) 
         navigate("/");
       })
       .catch(err => {
+        if (!err?.response) {
+          setErrors({ server : {message: 'No server response'}})
+        } else if ( err.response?.status === 401){
+          setErrors({ server : {message: 'Unauthorized'}})
+        } else {
         setErrors(err.response.data.errors)
+        }
       })
   }
 
@@ -76,6 +84,7 @@ const Register = () => {
                 <input type="password" name="confirmPassword" id="confirmPassword" placeholder="••••••••" className="sm:text-sm rounded-lg focus:ring-primary-600 block w-full p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500" required="" value={user.confirmPassword} onChange={handleChange}/>
                 {errors.confirmPassword ? <p className="text-red-500">{errors.confirmPassword.message}</p> : null}
             </div>
+            {errors.server ? <p className="text-red-500">{errors.server.message}</p> : null}
             <button type="submit" className="w-full text-white focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800">Sign up!</button>
             <p className="text-sm font-light text-gray-400">
                 Already have an account? <Link to="/login" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign in</Link>

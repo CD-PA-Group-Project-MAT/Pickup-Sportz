@@ -1,6 +1,5 @@
 const MessageController = require("../controllers/message.controller");
 const { authenticate } = require('../config/jwt.config');
-// TODO add back 'authenticate' middleware when JWT is working
 
 module.exports = app => {
     app.get("/api/messages", authenticate, MessageController.getAllMessages);
