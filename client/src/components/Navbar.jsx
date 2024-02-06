@@ -5,15 +5,14 @@ import useAuth from "../hooks/useAuth";
 
 const Navbar = () => {
   const { auth, setAuth } = useAuth();
-  // console.log("auth:")
-  // console.log(auth)
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
+
   const logoutUser = () => {
     axiosPrivate
-      .post("/api/logout", {}, { withCredentials: true }) // This will "clearCookie" access token and refresh token on back end
+      .post("/api/logout", {})//, { withCredentials: true })       // This will "clearCookie" refresh token on back end
       .then((res) => {      
-        setAuth({}) // TEMP <--- I'm not sure if this is necessary
+        setAuth({})                                             // This clears 'auth' of the user and access token
         navigate("/login");
       })
       .catch((err) => console.error("error logging out" + err));

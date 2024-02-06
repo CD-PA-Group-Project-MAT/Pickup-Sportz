@@ -15,7 +15,7 @@ function MessageForm(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    axiosPrivate.post("/api/messages", message, {withCredentials:true})
+    axiosPrivate.post("/api/messages", message)//, {withCredentials:true})
     .then(res => {
       setMessages([...messages, {...res.data, author : auth.user}])
       setMessage({...message, messageContent : ""}) // Clear messageContent field on form

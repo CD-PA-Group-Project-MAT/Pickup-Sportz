@@ -7,7 +7,7 @@ import useAuth from "../hooks/useAuth";
 
 const CreateEvent = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const pathLocation = useLocation();
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const [errors, setErrors] = useState({});
@@ -37,7 +37,7 @@ const CreateEvent = () => {
   // pulling locations from database
   useEffect(() => {
     axiosPrivate
-      .get("/api/locations", {withCredentials:true})
+      .get("/api/locations")//, {withCredentials:true})
       .then((res) => {
         if(res.data.length > 0){                                        // In case there are no locations in DB
           setEvent({...event, location : res.data[0]._id})              // The idea is that the location is prefilled with the first _id in the location collection
@@ -46,7 +46,7 @@ const CreateEvent = () => {
       })
       .catch(err => {
         console.error(err)
-        navigate('/login', { state: {from: location}, replace: true }) // TODO: Add this line to all axiosPrivate requests (along with imports and definitions above)
+        navigate('/login', { state: {from: pathLocation}, replace: true })
       })
   }, []);
 
@@ -68,7 +68,7 @@ const CreateEvent = () => {
   /* Handle form submission here */
   function handleSubmit(e){
     e.preventDefault();
-    axiosPrivate.post("/api/events", event, {withCredentials:true})
+    axiosPrivate.post("/api/events", event)//, {withCredentials:true})
     .then(res => {
       navigate('/search')
     })

@@ -9,10 +9,10 @@ function Search() {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
-  const location = useLocation();
+  const pathLocation = useLocation();
   const [eventsList,setEventsList] = useState([])
   const [filteredEvents, setFilteredEvents] = useState([])
-  const userId = auth.user._id // sessionStorage.getItem("userId") // User's first name retrieved from SessionStorage. It is placed there at registration or login
+  const userId = auth.user._id
 
   // This function to determines whether or not current user is already a player in a given event
   function userIsPlayer(event){
@@ -24,7 +24,7 @@ function Search() {
 
     // This block populates an array of the entire database of List and sets 'events' state
   useEffect(() => {
-    axiosPrivate.get("/api/events", {withCredentials: true})
+    axiosPrivate.get("/api/events")//, {withCredentials: true})
     .then(res => {
       setEventsList(res.data);
       const sortedEvents = res.data.sort((a,b) => new Date(a.eventDate) > new Date(b.eventDate) ? 1 : -1 )
@@ -32,13 +32,13 @@ function Search() {
     })
     .catch(err => {
       console.error(err)
-      navigate('/login', { state: {from: location}, replace: true }) // TODO: Add this line to all axiosPrivate requests (along with imports and definitions above)
+      navigate('/login', { state: {from: pathLocation}, replace: true }) 
     })
   },[])
 
   /* Here's where we handle a click on a 'join' link */
   function joinHandler(eventId){
-    axiosPrivate.patch(`/api/events/join/${eventId}/player/${userId}`,{} ,{withCredentials : true})
+    axiosPrivate.patch(`/api/events/join/${eventId}/player/${userId}`,{})// ,{withCredentials : true})
     .then(res => {
       let tempFilterEvents = [...filteredEvents]
       let tempEventsList = [...eventsList]
@@ -50,12 +50,14 @@ function Search() {
       setFilteredEvents(tempFilterEvents)
       setEventsList(tempEventsList)
     })
-    .catch(err=> console.error(err))
+    .catch(err=> {
+      console.error(err)
+    })
   }
 
   /* Here's where we handle a click on a 'drop' link */
   function handleDrop(eventId){
-    axiosPrivate.patch(`/api/events/drop/${eventId}/player/${userId}`,{} ,{withCredentials : true})
+    axiosPrivate.patch(`/api/events/drop/${eventId}/player/${userId}`,{})// ,{withCredentials : true})
     .then(res => {
       // I feel like there has to be a more elegant way to do the following
       // But I'm running out of energy 
@@ -84,7 +86,9 @@ function Search() {
       const sortedEvents = tempFilterEvents.sort((a,b) => new Date(a.eventDate) > new Date(b.eventDate) ? 1 : -1 )
       setFilteredEvents(sortedEvents)
     })
-    .catch(err=> console.error(err))
+    .catch(err=> {
+      console.error(err)
+    })
   }
 
   // TODO: Would be cool to add conditional styling for events that are in the past.

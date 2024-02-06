@@ -1,8 +1,6 @@
 const LocationController = require("../controllers/location.controller");
 const { authenticate } = require('../config/jwt.config');
 
-// TODO add back 'authenticate' middleware when JWT is working
-
 module.exports = app => {
     app.get("/api/locations", authenticate, LocationController.getAllLocations);
     app.get('/api/locations/:id', authenticate, LocationController.getLocationById);

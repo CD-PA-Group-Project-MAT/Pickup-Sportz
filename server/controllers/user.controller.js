@@ -10,7 +10,6 @@ const ACCESS_TOKEN_SECRET = "secret_key" // For development
 
 const ACCESS_TOKEN_DURATION = '5m'
 const REFRESH_TOKEN_DURATION = '7d'
-const ACCESS_COOKIE_MAXAGE = 1*60*60*1000
 const REFRESH_COOKIE_MAXAGE = 30*12*60*60*1000
 
 function generateAccessToken(user) {
@@ -24,17 +23,12 @@ function generateRefreshToken(user) {
 
 module.exports = {
   refreshToken : async (req,res) => {
-    // console.log("getting to refreshToken")
     try {
-      // const currentUser = {_id : req.body.userId, email: ""}; // TODO MAYBE get rid of email in token payload ?????
       const currentUser = await User.findOne({_id : req.body.userId});
-      // console.log("currentUser ");
-      // console.log(currentUser);
       const accessToken = await generateAccessToken(currentUser);
       console.log("Refreshing Access Token")
       res
         .status(201)
-        .cookie("accessToken", accessToken, { httpOnly: true, maxAge : ACCESS_COOKIE_MAXAGE}) // Cookie maxAge = 1 hour from now
         .json({msg: "Refreshed accessToken", user : currentUser, accessToken : accessToken })
     } catch(err) {
       res.status(400).json(err)
@@ -53,7 +47,6 @@ module.exports = {
         const refreshToken = generateRefreshToken(newUser);  
         res
           .status(201)
-          .cookie("accessToken", accessToken, { httpOnly: true, maxAge : ACCESS_COOKIE_MAXAGE}) 
           .cookie("refreshToken", refreshToken, { httpOnly: true, maxAge : REFRESH_COOKIE_MAXAGE}) 
           .json({msg: "Successful user registration", user : newUser, accessToken : accessToken})
       }
@@ -76,7 +69,6 @@ module.exports = {
           const refreshToken = generateRefreshToken(user);  
           res
             .status(201)
-            .cookie('accessToken', accessToken, {httpOnly:true, maxAge: ACCESS_COOKIE_MAXAGE})
             .cookie("refreshToken", refreshToken, { httpOnly: true, maxAge : REFRESH_COOKIE_MAXAGE})
             .json({msg: "Successful login", user : user, accessToken : accessToken})
         } else {                                                      // Password was NOT a match
@@ -91,7 +83,6 @@ module.exports = {
     
   logout: (req, res) => {
     res.clearCookie('refreshToken');
-    res.clearCookie('accessToken');
     res.sendStatus(200);                                              // Apparently, this is the equivalent of res.status(200).send('OK')
   },
   
