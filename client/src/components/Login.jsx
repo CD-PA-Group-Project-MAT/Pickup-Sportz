@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import axios from '../api/axios';
+import axios, { axiosPrivate } from '../api/axios';
 import useAuth from '../hooks/useAuth';
+import Notification from '../context/NotificationContext';
 
 const Login = () => {
   const { auth, setAuth } = useAuth();
+  const {notifications, setNotifications}  = useContext(Notification);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/"; // So here we are defining where we will 'navigate to' after a successful login. If the user was redirected here from 'RequireAuth' there should be a path saved in state that we can use. Otherwise, we navigate to '/' (which is the dashboard)
-  // console.log("*~*~*~*~ FROM path in Login.jsx: " + from)  
   const [errorMessage, setErrorMessage] = useState("");
   const [email,setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,12 +17,20 @@ const Login = () => {
   const handleLogin = (e) =>  {
       e.preventDefault();
       axios.post("/api/login", { email, password}, { withCredentials : true })  // TODO is withCredentials needed here? I don't think we are using cookie on the back end ??
-      .then((res) => {
+      .then((loginResponse) => {
         // console.log("Successful login. Here is axios response: ")
-        // console.log(res)
-        setAuth( {user: res.data.user, accessToken: res.data.accessToken}) 
-        navigate(from, { replace: true }); // The idea here is that are we go to the location requested but cut off by the RequireAuth.jsx page before user was redirected to Login
-      } )
+        // console.log("loginResponse")
+        // console.log(loginResponse)
+        setAuth( {user: loginResponse.data.user, accessToken: loginResponse.data.accessToken}) 
+        axios.get(`/api/notifications/user/${loginResponse.data.user._id}`) // TODO switch back to axiosPrivate (will need to await setAuth first)
+        .then(notificationsResponse => {
+          // console.log("notificationsResponse")
+          // console.log(notificationsResponse)
+          setNotifications(notificationsResponse.data)
+          navigate(from, { replace: true }); // The idea here is that are we go to the location requested but cut off by the RequireAuth.jsx page before user was redirected to Login
+        })
+        .catch()
+      })
       .catch(err => {
         if (!err?.response) {
           setErrorMessage('No Server Response')

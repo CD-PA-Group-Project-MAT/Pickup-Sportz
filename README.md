@@ -12,3 +12,4 @@
 ### TODO:
 - add axios AbortController functionality on axios requests if component unmounts https://www.youtube.com/watch?v=nI8PYZNFtac&list=PL0Zuz27SZ-6PRCpm9clX0WiBEMB70FWwd&index=4&pp=iAQB @ 10:00
 - add handling for slow connection on join/drop and anywhere else it might be needed (loading spinner or optimstic sequence of events)
+- consider, should we store refresh token in DB ?

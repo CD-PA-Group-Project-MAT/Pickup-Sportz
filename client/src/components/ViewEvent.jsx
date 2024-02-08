@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Navbar from "./Navbar";
 import MessageDisplay from "./MessageDisplay";
@@ -6,6 +6,8 @@ import MessageForm from "./MessageForm";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import Weather from "./Weather";
 import axios from 'axios'; // vanilla axios here for weather API
+import useAuth from "../hooks/useAuth";
+import Notification from "../context/NotificationContext";
 
 const ViewEvent = () => {
   const { id } = useParams();
@@ -15,8 +17,10 @@ const ViewEvent = () => {
   const [event, setEvent] = useState({});
   const [messages, setMessages] = useState([]);
   const [weatherData, setWeatherData] = useState([]);
+  const { auth } = useAuth();
+  const { notifications, setNotifications } = useContext(Notification);
   const units = "imperial"; // for weather API call
-
+  
   useEffect(() => {
     // Making 3 nested axios requests here. First from our backend, to get the target event,
     // Then to OpenWeather's geocoding API, where you give a city, state and country code and it returns longitude and latitude
@@ -47,9 +51,32 @@ const ViewEvent = () => {
 
     // get messages for this event and set in state
     axiosPrivate
-      .get(`/api/messages/${id}`)//, {withCredentials: true,})
+      .get(`/api/messages/events/${id}`)
       .then((res) => {
+        // console.log("mesages coming back from /api/messages/events/:id")
+        // console.log(res.data);
         setMessages(res.data);
+        // console.log("about to attempt removal of notifications")
+        let i = 0;
+        // let j = 0; 
+        let notificationsList = [...notifications]
+        // console.log("notificationsList")
+        // console.log(notificationsList)
+        while( i < notificationsList.length ){
+          if (notificationsList[i].event == id){
+            // console.log("about to attempt a")
+            axiosPrivate
+              .delete(`/api/notifications/${notificationsList[i]._id}`)
+              .then()
+              .catch(err => console.error(err))
+              notificationsList.splice(i,1);
+          } else {
+            i++;
+          }
+          // j++
+          // console.log("j= "+j)
+        }
+        setNotifications(notificationsList)
       })
       .catch((err) => {
         console.error(err);
@@ -99,6 +126,7 @@ const ViewEvent = () => {
               id={id}
               messages={messages}
               setMessages={setMessages}
+              event={event}
             />
           </div>
         </div>

@@ -16,5 +16,6 @@ require("./routes/user.routes")(app);
 require("./routes/event.routes")(app);
 require("./routes/message.routes")(app);
 require("./routes/location.routes")(app);
+require("./routes/notification.routes")(app);
 
 app.listen(port, ()=> console.log(`Express is listening on port ${port}`));
