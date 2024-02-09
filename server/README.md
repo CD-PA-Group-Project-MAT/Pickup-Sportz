@@ -1,6 +1,6 @@
-### Pickup-Sportz: Backend Design
+## Pickup-Sportz: ORIGINAL Backend Design
 
-## MongoDB collections:
+### MongoDB collections:
 
 users
 * _id | ObjectId
@@ -38,7 +38,7 @@ locations
 * state | String
 * locationDetails (notes) | String
 
-## API Routes
+### ORIGINAL API Routes
 user
 * app.get("/api/users", Users.getCurrentUser);
 * app.post("/api/register", Users.register);

@@ -24,7 +24,7 @@ const eventSchema = new mongoose.Schema({
       required: [ true, "Creator is required"] 
     }, 
     players: [{type: mongoose.Schema.Types.ObjectId, ref: "User"
-    }], 
+    }],
 }, {timestamps: true})
 
 module.exports = mongoose.model('Event', eventSchema)

@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import useRefreshToken from '../hooks/useRefreshToken';
 import useAuth from '../hooks/useAuth';
 
+
 /* This component wraps around all the 'protected' components such that any desired rendering of a protected component
    will execute the logic in this component first. If the auth.user value from context is present, then 'isLoading'
    stays false, and all components just pass right through <Outlet/>.
@@ -20,14 +21,12 @@ const PersistLogin = () => {
 
   useEffect(() => {
     const verifyRefreshToken = async () => {
-      // console.log("entered verifyRefreshToken in PersistLogin.jsx")
       try {
-        await refresh();
+        await refresh();                              // call useRefreshToken hook to get new access token
       } catch (err) {
         console.error(err)
       } finally {
-        // console.log("in FINALLY in PersistLogin")
-        setIsLoading(false) // This line is where the 'return' below switches back to <Outlet/> after refreshing access token
+        setIsLoading(false)                           // This line is where the 'return' below switches back to <Outlet/> after refreshing access token
       }
     }
     /*  Explanation of what is going on in the line below.
@@ -35,9 +34,6 @@ const PersistLogin = () => {
         So, when that happens, we run the verifyRefreshToken function that we define just above.
         Otherwise, we set 'isLoading' to false, meaning that any child components will pass through <Outlet/> 
     */
-
-    // console.log("+++++++++++++++++++++ entered PersistLogin.jsx. auth: ")
-    // console.log(auth)
     !auth?.user ? verifyRefreshToken() : setIsLoading(false)
   }, [])
 

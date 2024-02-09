@@ -15,6 +15,7 @@ const messageSchema = new mongoose.Schema({
       ref: "Event",
       required: [true, "Event is required for every message"]
   }, 
+
 }, {timestamps: true})
 
 module.exports = mongoose.model('Message', messageSchema)

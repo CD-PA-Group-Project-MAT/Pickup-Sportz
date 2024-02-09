@@ -15,7 +15,7 @@ const ACCESS_TOKEN_SECRET = "secret_key"; // For development
   to the server
   */
 module.exports.authenticate = (req, res, next) => {
-  jwt.verify(req?.headers['authorization'].split(" ")[1], ACCESS_TOKEN_SECRET, (err, payload) => {      // Access token is received in request 'headers' from axios on front end
+  jwt.verify(req?.headers['authorization']?.split(" ")[1], ACCESS_TOKEN_SECRET, (err, payload) => {      // Access token is received in request 'headers' from axios on front end
     if (err) {
       console.log("Access token auth failed within jwt.config.js");
       res.status(403).json({ verified: false });

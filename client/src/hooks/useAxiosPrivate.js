@@ -33,8 +33,8 @@ const useAxiosPrivate = () => {
         const prevRequest = error?.config;                                    // put our previous request in a constant
         if (error?.response?.status === 403 && !prevRequest?.sent ) {         // first time through, prevRequest.sent will be false, 2nd time through it will be true
           prevRequest.sent = true;                                            // next time around, if we still fail, .sent will be true and we will go to the 'reject'
-          const newAccessToken = await refresh();                             // 'refresh' function returns new access token via useRefreshToken hook
-          prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;  // and we add that new token to the axios 'headers'
+          const refreshResponse = await refresh();                             // 'refresh' function returns new access token via useRefreshToken hook
+          prevRequest.headers['Authorization'] = `Bearer ${refreshResponse.accessToken}`;  // and we add that new token to the axios 'headers'
           return axiosPrivate(prevRequest);                                   // And then, I think, we call AxiosPrivate again (recursively?) with our updated headers, hoping for success
         } 
         return Promise.reject(error);

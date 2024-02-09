@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Navbar from "./Navbar";
 import MessageDisplay from "./MessageDisplay";
@@ -6,6 +6,8 @@ import MessageForm from "./MessageForm";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import Weather from "./Weather";
 import axios from 'axios'; // vanilla axios here for weather API
+import useAuth from "../hooks/useAuth";
+import Notification from "../context/NotificationContext";
 
 const ViewEvent = () => {
   const { id } = useParams();
@@ -15,14 +17,17 @@ const ViewEvent = () => {
   const [event, setEvent] = useState({});
   const [messages, setMessages] = useState([]);
   const [weatherData, setWeatherData] = useState([]);
+  const { auth } = useAuth();
+  const { notifications, setNotifications } = useContext(Notification);
   const units = "imperial"; // for weather API call
-
+  
   useEffect(() => {
     // Making 3 nested axios requests here. First from our backend, to get the target event,
     // Then to OpenWeather's geocoding API, where you give a city, state and country code and it returns longitude and latitude
     // Then finally to OpenWeather's "One Call API 3.0" which gives 8 days forecast.
     // OpenWeather gives 1000 calls for free every day.
 
+    // TODO clean this up in an async function
     // For some reason, the following block is executed twice upon component load, I'm thinking maybe it is because state is changed when when we load messages below. I'll look into this more later...
     axiosPrivate
       .get(`/api/events/${id}`)//, { withCredentials: true })
@@ -47,9 +52,26 @@ const ViewEvent = () => {
 
     // get messages for this event and set in state
     axiosPrivate
-      .get(`/api/messages/${id}`)//, {withCredentials: true,})
+      .get(`/api/messages/events/${id}`)
       .then((res) => {
         setMessages(res.data);
+        /* Now, user has seen the messages, so we remove them from notification list in
+           in the DB *and* in notification context.
+        */
+        let i = 0;
+        let notificationsList = [...notifications]
+        while( i < notificationsList.length ){
+          if (notificationsList[i].event == id){
+            axiosPrivate
+              .delete(`/api/notifications/${notificationsList[i]._id}`)
+              .then()
+              .catch(err => console.error(err))
+              notificationsList.splice(i,1);
+          } else {
+            i++;
+          }
+        }
+        setNotifications(notificationsList) //update context with the culled list
       })
       .catch((err) => {
         console.error(err);
@@ -99,6 +121,7 @@ const ViewEvent = () => {
               id={id}
               messages={messages}
               setMessages={setMessages}
+              event={event}
             />
           </div>
         </div>

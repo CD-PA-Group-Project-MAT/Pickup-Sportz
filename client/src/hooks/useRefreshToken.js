@@ -18,8 +18,8 @@ const useRefreshToken = () => {
     setAuth(prev => {                                                                       // Here we are taking the existing/previous ('prev') contents of 'auth' and adding or replacing 
       return { ...prev, user: response.data.user, accessToken: response.data.accessToken}   // the 'accessToken' property and the 'user' property to 'auth'
     })
-    return response.data.accessToken;                                     // We return the new access token from useEffect...
+    return response.data;                                                                   // We return the response (including user and new access token) from useEffect...
   }
-  return refresh;                                                         // ...and then we return the new access token from the component
+  return refresh;                                                                           // ...and then we return the response from the component
 }
 export default useRefreshToken;

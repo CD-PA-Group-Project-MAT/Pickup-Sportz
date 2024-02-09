@@ -3,7 +3,7 @@ import useAuth from '../hooks/useAuth';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 
 function MessageForm(props) {
-  const {id, messages, setMessages} = props;
+  const {id, messages, setMessages, event} = props;
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   // const [errors, setErrors] = useState([]); -> removing because validation error message is not really necessary
@@ -13,18 +13,17 @@ function MessageForm(props) {
     event : id
   })
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    axiosPrivate.post("/api/messages", message)//, {withCredentials:true})
-    .then(res => {
+    try {
+      // DOING IN BACK END -> add all players for this event to notification (except for current user )
+      const res = await axiosPrivate.post("/api/messages", message)//, {withCredentials:true})
       setMessages([...messages, {...res.data, author : auth.user}])
       setMessage({...message, messageContent : ""}) // Clear messageContent field on form
-    })
-    .catch(err => {
+    } catch (err){
       console.error(err);
-      // setErrors(err.response.data.errors) -> removing because validation error message is not really necessary
-    })
-  }
+    }
+    }
 
   return (
     <div className=''>

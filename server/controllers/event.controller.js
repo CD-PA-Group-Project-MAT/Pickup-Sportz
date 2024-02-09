@@ -1,5 +1,5 @@
 const Event = require("../models/event.model");
-const User = require("../models/user.model")
+const User = require("../models/user.model");
 
 module.exports = {
   getAllEvents: (req, res) => {
@@ -26,11 +26,11 @@ module.exports = {
       .catch((err) => res.status(400).json(err));
   },
 
-  updateEvent: (req, res) => {
+  updateEvent: (req, res) => { // Note that where we have { new: true }, I believe this has to do with what is returned. In other words, the response here will be the event AFTER it is updated, not the event BEFORE it is updated
     Event.findOneAndUpdate({ _id: req.params.id }, req.body, {
-      new: true, runValidators: true,
+      new: true,
+      runValidators: true,
     })
-
       .then((updatedEvent) => res.json(updatedEvent))
       .catch((err) => res.status(400).json(err));
   },
@@ -43,33 +43,41 @@ module.exports = {
 
   joinEvent: async (req, res) => {
     try {
-      const eventId = req.params.eventId
-      const userId = req.params.userId
-      const updatedEvent = await Event.findByIdAndUpdate(eventId,
-        { $push: { players: userId}},
-        { new: true, useFindAndModify: false});
-        const updatedUser = await User.findByIdAndUpdate(userId,
-        { $push: { events: eventId}},
-        { new: true, useFindAndModify: false});
-        res.json(updatedEvent);
-      } catch (err) {
-      res.status(400).json(err)
+      const eventId = req.params.eventId;
+      const userId = req.params.userId;
+      const updatedEvent = await Event.findByIdAndUpdate(
+        eventId,
+        { $push: { players: userId } },
+        { new: true, useFindAndModify: false }
+      );
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { $push: { events: eventId } },
+        { new: true, useFindAndModify: false }
+      );
+      res.json(updatedEvent);
+    } catch (err) {
+      res.status(400).json(err);
     }
   },
 
   dropEvent: async (req, res) => {
     try {
-      const eventId = req.params.eventId
-      const userId = req.params.userId
-      const updatedEvent = await Event.findByIdAndUpdate(eventId,
-        { $pull: { players: userId}},
-        { new: true, useFindAndModify: false});
-      const updatedUser = await User.findByIdAndUpdate(userId,
-        { $pull: { events: eventId}},
-        { new: true, useFindAndModify: false});
-        res.json(updatedEvent);
+      const eventId = req.params.eventId;
+      const userId = req.params.userId;
+      const updatedEvent = await Event.findByIdAndUpdate(
+        eventId,
+        { $pull: { players: userId } },
+        { new: true, useFindAndModify: false }
+      );
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { $pull: { events: eventId } },
+        { new: true, useFindAndModify: false }
+      );
+      res.json(updatedEvent);
     } catch (err) {
-      res.status(400).json(err)
+      res.status(400).json(err);
     }
   },
 };

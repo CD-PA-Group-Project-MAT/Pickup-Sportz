@@ -99,8 +99,6 @@ module.exports = {
   },
 
   // TODO: this is untested(new) code. Test it out. 
-  // We are using this primarily for checking last login date so 
-  // that we can count the new messages since then
   updateUser: async (req, res) => {
     try{
       const updatedUser = await User.findOneAndUpdate ({_id : req.body.userId}, req.body, {new:true, runValidators:true}); // req.body.userId coming through JWT 

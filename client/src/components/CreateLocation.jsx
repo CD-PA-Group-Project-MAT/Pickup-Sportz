@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Navbar from "./Navbar";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const CreateLocation = () => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const CreateLocation = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     axiosPrivate
-      .post("/api/locations", location)//, {withCredentials: true,})
+      .post("/api/locations", location)
       .then((res) => {
         navigate("/newEvent");
       })

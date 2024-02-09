@@ -2,15 +2,19 @@
 import { Link, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth"; 
+import { useContext } from "react";
+import Notification from '../context/NotificationContext';
+
 
 const Navbar = () => {
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
+  const { notifications }  = useContext(Notification);
   const axiosPrivate = useAxiosPrivate();
 
   const logoutUser = () => {
     axiosPrivate
-      .post("/api/logout", {})//, { withCredentials: true })       // This will "clearCookie" refresh token on back end
+      .post("/api/logout", {})                                 // This will "clearCookie" refresh token on back end
       .then((res) => {      
         setAuth({})                                             // This clears 'auth' of the user and access token
         navigate("/login");
@@ -29,6 +33,11 @@ const Navbar = () => {
             <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"></div>
           </div>
           <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border  rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 bg-gray-800 md:bg-gray-900 border-gray-700">
+            <li >
+              { notifications?.length > 0 ? 
+              <span className=" text-gray-400 bg-gray-700 px-2 rounded-lg">{notifications.length}</span>
+               : null }
+            </li>
             <li>
               <Link to="/"
                 className="block py-2 px-3 text-white rounded md:bg-transparent p-0 hover:text-blue-500 md:p-0"

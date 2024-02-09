@@ -1,16 +1,19 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useAuth from "../hooks/useAuth"; 
+import Notification from "../context/NotificationContext";
+import newMessageIcon from "../assets/new_message.svg";
 
 const Dashboard = () => {
   const [ user, setUser ] = useState({}); // 'user' state holds the current user object
   const { auth } = useAuth();
+  const { notifications } = useContext(Notification);
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const pathLocation = useLocation();
-  const userFirstName = auth.user.firstName 
+  const userFirstName = auth.user.firstName ;
   const userId = auth.user._id;  
 
   /* This function will accept a date in ISO date format (eg:"2024-01-31T18:00:00.000Z" )
@@ -28,16 +31,26 @@ const Dashboard = () => {
   time we render this component
    */
   useEffect(() => {
+    console.log("attempting to load user...")
     axiosPrivate
-      .get("/api/users")//, {withCredentials: true})
+      .get("/api/users")
       .then(res => {
-        setUser(res.data[0])}
+        console.log("...loaded user, now adding notification flags")
+        let user = res.data[0]
+        for(let i = 0; i< user.events.length; i++) {                                                 // Here, we loop through all events and then for each event,
+          for(let j=0; j < notifications.length; j++){                                              // we loop through all notifications
+            if(notifications[j].event == user.events[i]._id){                                         // if there is a match...
+              user.events[i].newMessages = true;                                                      // We create a flag to alert the user of the notification in that event
+            }
+          }
+        }
+        setUser(user)}
       )
       .catch(err => {
         console.error(err)
         navigate('/login', { state: {from: pathLocation}, replace: true })
       })
-  }, []);
+  }, [notifications]);
 
   return (
     <div>
@@ -65,7 +78,10 @@ const Dashboard = () => {
             user.events.filter((event) => new Date(event.eventDate).toDateString() == new Date().toDateString() ).sort((a,b) => new Date(a.eventDate) > new Date(b.eventDate) ? 1 : -1 ).map(event => 
               <tr className="border-b bg-gray-800 border-gray-700 hover:bg-gray-600" key={event._id}>
                 <td className="px-6 py-4">
-                  <Link to={`/events/${event._id}`}>{event.eventTitle}</Link>
+                  <Link to={`/events/${event._id}`}>
+                    {event.eventTitle}
+                    {event?.newMessages ? <img src={newMessageIcon} width="20"/> : null }
+                  </Link>
                 </td>
                 <td className="px-6 py-4">
                   {event.location.locationName}
@@ -112,7 +128,10 @@ const Dashboard = () => {
             user.events.filter((event) => afterToday(event.eventDate)).sort((a,b) => new Date(a.eventDate) > new Date(b.eventDate) ? 1 : -1 ).map(event => 
               <tr className=" border-b bg-gray-800 border-gray-700 hover:bg-gray-600" key={event._id}>
                 <td className="px-6 py-4">
-                  <Link to={`/events/${event._id}`}>{event.eventTitle}</Link>
+                <Link to={`/events/${event._id}`}>
+                    {event.eventTitle}
+                    {event?.newMessages ? <img src={newMessageIcon} width="20"/> : null }
+                  </Link>
                 </td>
                 <td className="px-6 py-4">
                   {event.location.locationName}
