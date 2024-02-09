@@ -31,9 +31,11 @@ const Dashboard = () => {
   time we render this component
    */
   useEffect(() => {
+    console.log("attempting to load user...")
     axiosPrivate
       .get("/api/users")
       .then(res => {
+        console.log("...loaded user, now adding notification flags")
         let user = res.data[0]
         for(let i = 0; i< user.events.length; i++) {                                                 // Here, we loop through all events and then for each event,
           for(let j=0; j < notifications.length; j++){                                              // we loop through all notifications
@@ -48,7 +50,7 @@ const Dashboard = () => {
         console.error(err)
         navigate('/login', { state: {from: pathLocation}, replace: true })
       })
-  }, []);
+  }, [notifications]);
 
   return (
     <div>

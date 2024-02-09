@@ -25,12 +25,16 @@ function Search() {
     return false;
   }
 
-    // This block populates an array of the entire database of List and sets 'events' state
+  /* This block gets all events from the DB. It loops through the entire list to see if any
+      events have matching notifications (from Notification context). Any time there is a 
+      match, the event object gets a new property 'newMessages' added to it and set to true.
+      When this processing of notifications is done, the event list is set in state 'all Events'.
+      Finally, the list of all events is sorted by date and then also placed in 'filteredEvents'
+      state, which is what is actually rendered in the return.
+  */
   useEffect(() => {
     axiosPrivate.get("/api/events")
       .then(res => {
-        // console.log("res.data")
-        // console.log(res.data)
         let allEvents = res.data;
         for(let i = 0; i< allEvents.length; i++) {                                                 // Here, we loop through all events and then for each event,
           allEvents[i].newMessages = false;
@@ -48,7 +52,7 @@ function Search() {
         console.error(err)
         navigate('/login', { state: {from: pathLocation}, replace: true }) 
     })
-  },[])
+  },[notifications])
 
   /* Here's where we handle a click on a 'join' link */
   function handleJoin(eventId){

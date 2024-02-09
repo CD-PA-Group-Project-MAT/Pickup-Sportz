@@ -57,7 +57,8 @@ module.exports = {
 
   deleteMessage: (req, res) => {                                    // Delete message. Additionally, we will want to delete any associated notifications.
     Message.findOneAndDelete({ _id: req.params.id })
-      .then((result) => res.json(result))// TODO delete notifications associated with the deleted message
+      .then((result) => res.json(result))
+      // TODO delete notifications associated with the deleted message
       .catch((err) => console.log(err));
   },
 };

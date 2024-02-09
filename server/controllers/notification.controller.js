@@ -14,13 +14,8 @@ module.exports = {
   },
 
   getNotificationsByUserId: (req, res) => {
-    // console.log("attempting getNotificationsByUserId with ID = "+ req.params.userId)
     Notification.find({ user: req.params.userId })
-      .then((usersNotifications) => {
-        // console.log("attemp is successful. userNotifications = ")
-        // console.log(usersNotifications)
-        res.json(usersNotifications)
-      })
+      .then((usersNotifications) => res.json(usersNotifications))
       .catch((err) => res.status(400).json(err));
   },
 

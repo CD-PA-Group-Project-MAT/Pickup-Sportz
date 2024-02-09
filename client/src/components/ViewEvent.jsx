@@ -27,6 +27,7 @@ const ViewEvent = () => {
     // Then finally to OpenWeather's "One Call API 3.0" which gives 8 days forecast.
     // OpenWeather gives 1000 calls for free every day.
 
+    // TODO clean this up in an async function
     // For some reason, the following block is executed twice upon component load, I'm thinking maybe it is because state is changed when when we load messages below. I'll look into this more later...
     axiosPrivate
       .get(`/api/events/${id}`)//, { withCredentials: true })
@@ -53,18 +54,14 @@ const ViewEvent = () => {
     axiosPrivate
       .get(`/api/messages/events/${id}`)
       .then((res) => {
-        // console.log("mesages coming back from /api/messages/events/:id")
-        // console.log(res.data);
         setMessages(res.data);
-        // console.log("about to attempt removal of notifications")
+        /* Now, user has seen the messages, so we remove them from notification list in
+           in the DB *and* in notification context.
+        */
         let i = 0;
-        // let j = 0; 
         let notificationsList = [...notifications]
-        // console.log("notificationsList")
-        // console.log(notificationsList)
         while( i < notificationsList.length ){
           if (notificationsList[i].event == id){
-            // console.log("about to attempt a")
             axiosPrivate
               .delete(`/api/notifications/${notificationsList[i]._id}`)
               .then()
@@ -73,10 +70,8 @@ const ViewEvent = () => {
           } else {
             i++;
           }
-          // j++
-          // console.log("j= "+j)
         }
-        setNotifications(notificationsList)
+        setNotifications(notificationsList) //update context with the culled list
       })
       .catch((err) => {
         console.error(err);

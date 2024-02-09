@@ -25,8 +25,6 @@ const eventSchema = new mongoose.Schema({
     }, 
     players: [{type: mongoose.Schema.Types.ObjectId, ref: "User"
     }],
-    newestMessage: { type: Date
-    } 
 }, {timestamps: true})
 
 module.exports = mongoose.model('Event', eventSchema)

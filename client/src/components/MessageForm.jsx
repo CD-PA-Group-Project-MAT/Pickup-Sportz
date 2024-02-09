@@ -16,14 +16,10 @@ function MessageForm(props) {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      // console.log("event")
-      // console.log(event)
       // DOING IN BACK END -> add all players for this event to notification (except for current user )
       const res = await axiosPrivate.post("/api/messages", message)//, {withCredentials:true})
       setMessages([...messages, {...res.data, author : auth.user}])
       setMessage({...message, messageContent : ""}) // Clear messageContent field on form
-      // await axiosPrivate.patch(`/api/events/${event._id}`, { ...event, newestMessage : new Date() } ) 
-
     } catch (err){
       console.error(err);
     }

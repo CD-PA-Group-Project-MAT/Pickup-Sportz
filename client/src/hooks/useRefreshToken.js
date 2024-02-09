@@ -10,7 +10,7 @@ import useAuth from './useAuth'
   that is wrapped in PersistAuth.jsx at a time when there is no 'user' object in 'auth' context.
 */
 const useRefreshToken = () => {
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
 
   const refresh = async () => {
     const response = await axios.get("/api/refresh", {withCredentials: true})

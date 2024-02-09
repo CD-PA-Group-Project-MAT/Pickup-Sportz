@@ -25,10 +25,8 @@ const Register = () => {
 
   const handleRegister = (e) => {
     e.preventDefault();
-      axios.post("/api/register", user, {withCredentials:true}) // TODO not sure if we need withCredentials here??
+      axios.post("/api/register", user, {withCredentials:true})
       .then((res) => {
-        // console.log("Successful registration. Here is axios response: ")
-        // console.log(res)
         setAuth( {user: res.data.user, accessToken: res.data.accessToken}) 
         navigate("/");
       })
