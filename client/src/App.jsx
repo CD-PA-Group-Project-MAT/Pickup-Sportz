@@ -10,6 +10,7 @@ import Layout from "./components/Layout.jsx";
 import RequireAuth from "./components/RequireAuth.jsx";
 import Missing from "./components/Missing.jsx";
 import PersistLogin from "./components/PersistLogin.jsx";
+import ViewUser from "./components/ViewUser.jsx";
 
 /*
   All routes are wrapped in 'Layout' component.
@@ -40,6 +41,7 @@ function App() {
             <Route path="newlocation" element={<CreateLocation />} />
             <Route path="search" element={<Search />} />
             <Route path="events/:id" element={<ViewEvent />} />
+            <Route path="users/:id" element={<ViewUser />} />
           </Route>
         </Route>
 

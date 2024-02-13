@@ -8,6 +8,7 @@ import Weather from "./Weather";
 import axios from 'axios'; // vanilla axios here for weather API
 import useAuth from "../hooks/useAuth";
 import Notification from "../context/NotificationContext";
+import Participants from "./Participants";
 
 const ViewEvent = () => {
   const { id } = useParams();
@@ -30,7 +31,7 @@ const ViewEvent = () => {
     // TODO clean this up in an async function
     // For some reason, the following block is executed twice upon component load, I'm thinking maybe it is because state is changed when when we load messages below. I'll look into this more later...
     axiosPrivate
-      .get(`/api/events/${id}`)//, { withCredentials: true })
+      .get(`/api/events/${id}`)
       .then((resEvent) => {
         setEvent({ ...resEvent.data });
         // API CALLS IN HERE FOR LOCATION & WEATHER
@@ -108,6 +109,10 @@ const ViewEvent = () => {
         </div>
         <div className="ml-5">
           <Weather weatherData={weatherData} event={event}/>
+
+        </div>
+        <div className="ml-5">
+          <Participants event={event}/>
 
         </div>
       </div>

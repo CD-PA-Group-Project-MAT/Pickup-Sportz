@@ -97,6 +97,18 @@ module.exports = {
       res.status(400).json(err);
     }
   },
+  
+  getUser: async (req, res) => {
+    try{
+      const oneUser = await User
+        .findById({_id : req.params.id})
+        .populate({path: 'events', populate: { path: 'location', model: "Location"}}); 
+      res.status(200).json(oneUser);
+    } 
+    catch (err){
+      res.status(400).json(err);
+    }
+  },
 
   // TODO: this is untested(new) code. Test it out. 
   updateUser: async (req, res) => {
